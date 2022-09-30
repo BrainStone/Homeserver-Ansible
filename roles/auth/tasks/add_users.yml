@@ -6,7 +6,7 @@
     groups: "{{ (all_user_attrs[item].groups | default([])) + (all_user_attrs[item].admin | default(false) | ternary(['sudo'], [])) }}"
     password: "{{ all_user_attrs[item].password }}"
     create_home: true
-    home: "/home/{{ item }}"
+    home: "{{ (item == 'root') | ternary('/root', '/home/' + item) }}"
   with_items: "{{ authorized_users }}"
   when: all_user_attrs[item].state | default('present') != 'absent'
   tags: auth_accounts
@@ -19,7 +19,7 @@
     state: "{{ all_user_attrs[item].state | default('present') }}"
     manage_dir: yes
     key: "{{ all_user_attrs[item].ssh_keys | join('\n') }}"
-    path: "/home/{{ item }}/.ssh/authorized_keys"
+    path: "{{ (item == 'root') | ternary('/root', '/home/' + item) }}/.ssh/authorized_keys"
   with_items: "{{ authorized_users }}"
   when: all_user_attrs[item].ssh_keys is defined
   tags: auth_accounts

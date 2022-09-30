@@ -21,5 +21,7 @@
   template:
     src: "{{ item }}"
     dest: "/home/ansible/.{{ item | basename | regex_replace('\\.j2$', '') }}"
+    user: ansible
+    group: ansible
   with_fileglob:
     - ../templates/bashrc/skel/*.j2

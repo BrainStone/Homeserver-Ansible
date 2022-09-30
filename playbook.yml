@@ -1,8 +1,8 @@
 - hosts: homeserver
   roles:
-    # Most importan things
-    - { name: base, tags: base }
+    # Most important things
     - { name: auth, tags: [ auth, security ] }
+    - { name: base, tags: base }
     
     # Normal stuff
     - { name: borg, tags: borg }
