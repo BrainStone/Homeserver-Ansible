@@ -1,0 +1,12 @@
+- name: Ensure scripts dir exists
+  file:
+    path: /root/scripts
+    state: directory
+
+- name: Copy scripts
+  template:
+    src: "{{ item }}"
+    dest: "/root/scripts/{{ item | basename | regex_replace('\\.j2$', '') }}"
+    mode: 0775 
+  with_fileglob:
+    - ../templates/scripts/*.j2

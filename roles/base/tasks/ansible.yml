@@ -1,0 +1,32 @@
+- name: Add Ansible Repo
+  apt_repository:
+    repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main
+    update_cache: false
+    filename: ansible
+    state: present
+  check_mode: false
+
+- name: Add Ansible Repo Key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 93C4A3FD7BB9C367
+  check_mode: false
+
+- name: Ensure /etc/bash_completion.d exists
+  file:
+    path: /etc/bash_completion.d
+    state: directory
+
+- name: Install Ansible
+  apt:
+    pkg:
+      - ansible
+      - openssh-server
+      - openssh-sftp-server
+      - "{{ python_package_version }}-argcomplete"
+      - "{{ python_package_version }}-jmespath"
+      - "{{ python_package_version }}-lxml"
+      - "{{ python_package_version }}-netaddr"
+    state: latest
+    update_cache: true
+  notify: Register python-argcomplete

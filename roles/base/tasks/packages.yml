@@ -1,0 +1,70 @@
+- name: Install additional apt protocol supports
+  apt:
+    pkg:
+      - apt-transport-https
+    update_cache: false
+
+- name: Add Debian Backports
+  apt_repository:
+    repo: "{{ item }} http://deb.debian.org/debian {{ ansible_distribution_release | lower }}-backports main"
+    update_cache: false
+    filename: backports
+  check_mode: false
+  with_items:
+    - deb
+    - deb-src
+
+- name: Add Azlux's repository
+  apt_repository:
+    repo: "deb https://packages.azlux.fr/debian/ {{ ansible_distribution_release | lower }} main"
+    update_cache: false
+    filename: azlux
+  check_mode: false
+
+- name: Add Azlux's GPG key
+  apt_key:
+    url: https://azlux.fr/repo.gpg.key
+  check_mode: false
+
+- name: Roberto Mier Escandon's Repo
+  apt_repository:
+    repo: "ppa:rmescandon/yq"
+    codename: focal
+    update_cache: false
+    filename: rmescandon-yq
+  check_mode: false
+
+- name: Roberto Mier Escandon's Repo Key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: CC86BB64
+  check_mode: false
+
+- name: Install Base Packages
+  apt:
+    pkg: "{{ base_packages }}"
+    state: latest
+    autoclean: true
+    autoremove: true
+    update_cache: true
+  notify: Set up command-not-found
+
+- name: Enable systemd-journal persitent log
+  file:
+    path: /var/log/journal
+    state: directory
+    owner: root
+    group: systemd-journal
+    mode: 02755
+
+- name: Set Timezone
+  copy:
+    content: "{{ timezone }}\n"
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Update timedatectl
+    - Update Timezone
+    - Restart syslog

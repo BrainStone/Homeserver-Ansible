@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Borg backup run
+After=network.target
+RequiresMountsFor={{ borg_repository }}
+
+[Service]
+Type=oneshot
+ExecStart={{ borg_binary_location }} create --verbose --stats \
+	--exclude-caches \
+	--exclude-from /root/.borg/exclusions.conf \
+	--compression "{{ borg_compression }}" \
+	"{{ borg_repository }}::backup-{now:%%Y-%%m-%%d_%%H:%%M:%%S}" /
+ExecStartPost={{ borg_binary_location }} prune -v --list \
+	"--keep-within={{ borg_prune_keep_within }}" \
+	"--keep-daily={{ borg_prune_keep_daily }}" \
+	"--keep-weekly={{ borg_prune_keep_weekly }}" \
+	"--keep-monthly={{ borg_prune_keep_monthly }}" \
+	"--keep-yearly={{ borg_prune_keep_yearly }}"
+EnvironmentFile=/root/.borg/passphrase
+
+# It's no priority
+Nice=19
+IOSchedulingClass=2
+IOSchedulingPriority=7

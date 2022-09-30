@@ -1,0 +1,2 @@
+certbot_base_parameters: --agree-tos --non-interactive 
+certbot_auth_parameters: certonly --apache

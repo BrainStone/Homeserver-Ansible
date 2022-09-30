@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Automated borg backup
+
+[Timer]
+OnCalendar={{ borg_schedule_calendar }}
+RandomizedDelaySec={{ borg_schedule_delay }}
+Unit=borg.service
+
+[Install]
+WantedBy=multi-user.target

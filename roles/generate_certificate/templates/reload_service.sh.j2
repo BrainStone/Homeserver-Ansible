@@ -1,0 +1,10 @@
+#! /bin/bash
+# {{ ansible_managed }}
+
+# Convert space separated list of domains into array
+IFS=" " read -r -a RENEWED_DOMAINS <<< "$RENEWED_DOMAINS"
+
+# Let {{ service }} know that the domain {{ certificate_hostname }} has received a new certificate
+if [[ "${RENEWED_DOMAINS[0]}" == "{{ certificate_hostname }}" ]]; then
+	/usr/bin/systemctl {{ reload | default(false) | ternary('reload', 'restart') }} {{ service }}.service
+fi

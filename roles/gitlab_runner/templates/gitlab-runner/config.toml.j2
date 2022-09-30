@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+concurrent = 4
+check_interval = 0
+
+[session_server]
+	session_timeout = 1800
+
+[[runners]]
+	name = "Self-Ansible-Runner"
+	url = "https://gitlab.project-creative.net/"
+	id = {{ gitlab_runner_id }}
+	token = "{{ gitlab_runner_token }}"
+  token_obtained_at = 0001-01-01T00:00:00Z
+  token_expires_at = 0001-01-01T00:00:00Z
+	executor = "shell"
+	environment = ["LC_ALL=C.UTF-8"]
+	shell = "bash"
+	[runners.custom_build_dir]
+	[runners.cache]
+		[runners.cache.s3]
+		[runners.cache.gcs]
+		[runners.cache.azure]

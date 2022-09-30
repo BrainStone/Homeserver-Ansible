@@ -1,0 +1,25 @@
+- name: Set Hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Improve uname
+  template:
+    src: hostname/uname.sh.j2
+    dest: /etc/update-motd.d/10-uname
+    mode: 0755
+
+- name: Add Banner
+  template:
+    src: hostname/motd.sh.j2
+    dest: /etc/update-motd.d/50-banner
+    mode: 0755
+
+- name: Remove legal notice
+  file:
+    path: /etc/motd
+    state: absent
+
+- name: Set timezone
+  timezone:
+    hwclock: UTC
+    name: "{{ timezone }}"

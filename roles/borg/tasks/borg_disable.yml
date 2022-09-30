@@ -1,0 +1,17 @@
+- name: Remove borg package
+  apt:
+    name: borgbackup
+    state: absent
+
+- name: Delete /root/.borg/ directory
+  file:
+    state: absent
+    path: /root/.borg/
+
+- name: Delete borg systemd files
+  file:
+    state: absent
+    path: "/etc/systemd/system/borg.{{ item }}"
+  with_items:
+    - service
+    - timer

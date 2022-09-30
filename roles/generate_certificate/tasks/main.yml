@@ -1,0 +1,11 @@
+- name: "Create Certificate for {{ certificate_hostname }}"
+  shell: "certbot {{ certbot_base_parameters }} {{ certbot_auth_parameters }} -d {{ certificate_hostname }}"
+  args:
+    creates: "/etc/letsencrypt/live/{{ certificate_hostname }}/fullchain.pem"
+
+- name: Template service reload script
+  template:
+    src: reload_service.sh.j2
+    dest: "/etc/letsencrypt/renewal-hooks/deploy/{{ service }}_{{ certificate_hostname }}_reload.sh"
+    mode: 0700
+  when: service is defined

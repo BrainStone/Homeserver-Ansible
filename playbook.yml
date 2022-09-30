@@ -1,0 +1,17 @@
+- hosts: homeserver
+  roles:
+    # Most importan things
+    - { name: base, tags: base }
+    - { name: auth, tags: [ auth, security ] }
+    
+    # Normal stuff
+    - { name: borg, tags: borg }
+    - { name: chrony, tags: [ chrony, ntp ] }
+    - { name: fail2ban, tags: [ fail2ban, security ] }
+    
+    # Early stuff
+    - { name: certbot, tags: [ certbot, security ] }
+    - { name: docker, tags: docker }
+    
+    # Software stuff
+    - { name: gitlab_runner, tags: gitlab_runner, when: gitlab_runner_token is defined }

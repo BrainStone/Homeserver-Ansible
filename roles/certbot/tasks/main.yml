@@ -1,0 +1,17 @@
+- name: Install certbot
+  apt:
+    pkg:
+      - certbot
+      - "{{ python_package_version }}-certbot-apache"
+    state: present
+
+- name: Set certbot Notification E-Mail Address
+  shell: "certbot {{ certbot_base_parameters }} register -m certbot@rahasia.de --no-eff-email"
+  args:
+    creates: /etc/letsencrypt/accounts
+
+- name: Create Host Certificate
+  include_role:
+    name: generate_certificate
+  vars:
+    certificate_hostname: "{{ inventory_hostname }}"

@@ -1,0 +1,23 @@
+- name: Register python-argcomplete
+  shell: "{{ 'activate-global-python-argcomplete' if python_package_version == 'python' else 'activate-global-python-argcomplete3' }}"
+
+- name: Restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+
+- name: Set up command-not-found
+  shell: |
+    apt-file update
+    update-command-not-found
+
+- name: Update timedatectl
+  shell: "timedatectl set-timezone {{ timezone }}"
+
+- name: Update Timezone
+  shell: dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: Restart syslog
+  systemd:
+    name: syslog
+    state: restarted

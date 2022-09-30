@@ -1,0 +1,18 @@
+- name: Install chrony
+  apt:
+    name: chrony
+    state: present
+
+- name: Configure Chrony
+  template:
+    src: "{{ item }}"
+    dest: "/etc/chrony/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/*.j2
+  notify: Restart chrony
+
+- name: Enable chrony
+  systemd:
+    name: chrony
+    state: started
+    enabled: true

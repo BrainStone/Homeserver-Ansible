@@ -1,0 +1,49 @@
+# {{ ansible_managed }}
+
+[{{ fail2ban_jail_name }}]
+enabled  = true
+filter   = {{ fail2ban_filter }}
+port     = {{ fail2ban_port }}
+{% if fail2ban_logpath is defined %}
+logpath  = %({{ fail2ban_logpath }})s
+{% endif %}
+{% if fail2ban_backend is defined %}
+backend  = %({{ fail2ban_backend }})s
+{% elif fail2ban_raw_backend is defined %}
+backend  = {{ fail2ban_raw_backend }}
+{% endif %}
+maxretry = 6
+findtime = 600
+bantime  = 600
+
+[{{ fail2ban_jail_name }}-week]
+enabled  = true
+filter   = {{ fail2ban_filter }}
+port     = {{ fail2ban_port }}
+{% if fail2ban_logpath is defined %}
+logpath  = %({{ fail2ban_logpath }})s
+{% endif %}
+{% if fail2ban_backend is defined %}
+backend  = %({{ fail2ban_backend }})s
+{% elif fail2ban_raw_backend is defined %}
+backend  = {{ fail2ban_raw_backend }}
+{% endif %}
+maxretry = 12
+findtime = 86400
+bantime  = 86400
+
+[{{ fail2ban_jail_name }}-month]
+enabled  = true
+filter   = {{ fail2ban_filter }}
+port     = {{ fail2ban_port }}
+{% if fail2ban_logpath is defined %}
+logpath  = %({{ fail2ban_logpath }})s
+{% endif %}
+{% if fail2ban_backend is defined %}
+backend  = %({{ fail2ban_backend }})s
+{% elif fail2ban_raw_backend is defined %}
+backend  = {{ fail2ban_raw_backend }}
+{% endif %}
+maxretry = 24
+findtime = 2592000
+bantime  = 2592000

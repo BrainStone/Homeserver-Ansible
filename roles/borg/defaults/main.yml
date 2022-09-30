@@ -1,0 +1,25 @@
+# Sets whether borg backups are enabled or not
+borg_backups_enabled: yes
+
+# List of directories to exclude
+borg_paths_exclude: []
+
+borg_repository: /backup/borg
+
+borg_compression: auto,lzma,6
+
+# Enable timer unit
+borg_schedule: yes
+# Every hour (systemd timer syntax)
+borg_schedule_calendar: "hourly"
+# randomly spread backups across 10 minutes
+borg_schedule_delay: 600
+
+# Backup cleanup, executed if backup completed with success
+borg_prune_keep_within: 1d
+borg_prune_keep_daily: 7
+borg_prune_keep_weekly: 4
+borg_prune_keep_monthly: 12
+borg_prune_keep_yearly: 10
+
+borg_binary_location: /usr/bin/borg

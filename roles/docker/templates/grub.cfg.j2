@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+# This enables SWAP capabilities for docker
+GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT swapaccount=1"
+
+# This ensures docker can generate stats for containers
+GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT systemd.unified_cgroup_hierarchy=1 cgroup_enable=memory"

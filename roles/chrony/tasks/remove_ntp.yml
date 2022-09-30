@@ -1,0 +1,4 @@
+- name: Uninstall ntp
+  apt:
+    name: ntp
+    state: absent

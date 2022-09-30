@@ -1,0 +1,3 @@
+- name: Create server repository
+  shell: '. ~/.borg/inc.sh && borg init -e repokey'
+  ignore_errors: yes

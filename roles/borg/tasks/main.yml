@@ -1,0 +1,5 @@
+- import_tasks: borg.yml
+  when: borg_backups_enabled
+
+- import_tasks: borg_disable.yml
+  when: borg_backups_enabled == False

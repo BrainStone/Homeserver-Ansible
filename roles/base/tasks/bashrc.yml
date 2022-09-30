@@ -1,0 +1,25 @@
+- name: Configure bash.bashrc
+  template:
+    src: bashrc/bash.bashrc.j2
+    dest: /etc/bash.bashrc
+
+- name: Configure root init files
+  template:
+    src: "{{ item }}"
+    dest: "/root/.{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/bashrc/root/*.j2
+
+- name: Configure skel init files
+  template:
+    src: "{{ item }}"
+    dest: "/etc/skel/.{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/bashrc/skel/*.j2
+
+- name: Configure Ansible user init files
+  template:
+    src: "{{ item }}"
+    dest: "/home/ansible/.{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/bashrc/skel/*.j2

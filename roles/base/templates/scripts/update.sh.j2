@@ -1,0 +1,21 @@
+#! /bin/bash
+# {{ ansible_managed }}
+
+# Force to run with bash
+if [ -z "$BASH" ];then bash $0 "$@";exit;fi
+
+echo -en "\a"
+figlet -t -f smslant -k "        apt  update"
+apt update
+
+echo -en "\a"
+figlet -t -f smslant -k "        apt  dist-upgrade"
+apt dist-upgrade
+
+echo -en "\a"
+figlet -t -f smslant -k "        apt  autoremove"
+apt autoremove
+
+echo -en "\a"
+figlet -t -f smslant -k "        apt  autoclean"
+apt autoclean

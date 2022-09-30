@@ -1,0 +1,57 @@
+# Exclusion syntax:
+#
+# https://borgbackup.readthedocs.io/en/stable/usage.html#borg-help-patterns
+#
+# The idea is that we're not going to restore from the backup,
+# but re-deploy from Ansible. This means that anything that is not
+# application data or configuration can be safely excluded.
+
+borg_default_exclude:
+# Exclude system filesystems
+
+  - /dev/
+  - /proc/
+  - /run/
+  - /sys/
+  - /boot/
+
+# Distribution package contents
+
+  - /usr/bin/
+  - /usr/sbin/
+  - /usr/lib/
+  - /usr/lib64/
+  - /usr/share/
+  - /usr/libexec/
+  - /usr/include/
+  - /usr/src/
+
+# Exclude borg password
+
+  - /root/.borg/passphrase
+
+# Exclude caches
+
+  - /var/cache/
+  - /var/lib/apt/lists/
+  - /var/lib/dpkg/parts/
+  - /var/lib/dpkg/info/
+  - /root/.cache/
+  - /home/*/.cache/
+
+# Exclude temporary files
+
+  - /tmp/
+  - /var/tmp/
+  - /root/.ansible/tmp/
+  - /home/*/.ansible/tmp/
+
+# Log files (keep until logging cluster is proven to work)
+  - /var/log/
+
+# Misc application stuff (may not even exist in the first place!)
+  
+  - /var/lib/docker/
+  - /home/gitlab-runner/builds/
+  - /home/gitlab-runner/cache/
+  - /var/lib/pterodactyl/volumes/*/plugins/dynmap/web/tiles/

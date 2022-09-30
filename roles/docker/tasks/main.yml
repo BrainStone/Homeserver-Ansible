@@ -1,0 +1,37 @@
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+  check_mode: false
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    update_cache: false
+    filename: docker
+  check_mode: false
+
+- name: Install Docker CE
+  apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    update_cache: yes
+
+- name: Configure docker
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: Restart docker
+
+- name: Configure GRUB
+  template:
+    src: grub.cfg.j2
+    dest: /etc/default/grub.d/99-docker.cfg
+  notify: Update GRUB
+
+- name: Enable docker
+  systemd:
+    name: docker
+    state: started
+    enabled: true

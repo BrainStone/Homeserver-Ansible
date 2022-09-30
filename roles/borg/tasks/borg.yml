@@ -1,0 +1,65 @@
+- name: Install borg
+  apt:
+    pkg:
+      - borgbackup
+      - util-linux
+
+- name: Create Borg data dir
+  file:
+    state: directory
+    path: /root/.borg/exclusions.d
+    mode: 0700
+  tags: borgexclude
+
+- name: Create Borg repository
+  file:
+    state: directory
+    path: "{{ borg_repository }}"
+    mode: 0700
+  tags: borgexclude
+
+- name: Borg default exclusions
+  copy:
+    dest: /root/.borg/exclusions.d/default.conf
+    content: "{{ borg_default_exclude | join('\n')+'\n' }}"
+  tags: borgexclude
+
+- name: Borg host specific exclusions
+  copy:
+    dest: /root/.borg/exclusions.d/host.conf
+    content: "{{ borg_paths_exclude | join('\n')+'\n' }}"
+  tags: borgexclude
+
+- name: Merge exclusions
+  assemble:
+    dest: /root/.borg/exclusions.conf
+    remote_src: yes
+    src: /root/.borg/exclusions.d
+  tags: borgexclude
+
+- name: Template borg password file
+  template:
+    src: passphrase.sh.j2
+    dest: /root/.borg/passphrase
+  no_log: True
+  notify: Create server repository
+
+- name: Create borg include helper script
+  copy:
+    dest: /root/.borg/inc.sh
+    content: 'set -a; . ~/.borg/passphrase; set +a'
+    mode: 0700
+
+- name: Template borg systemd files
+  template:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/systemd/*.j2
+
+- name: Enable borg.timer
+  systemd:
+    name: borg.timer
+    daemon_reload: yes
+    enabled: "{{ borg_schedule | ternary('yes', 'no') }}"
+    state: "{{ borg_schedule | ternary('started', 'stopped') }}"

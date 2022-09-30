@@ -1,0 +1,35 @@
+- name: Add GitLab-Runner GPG key
+  apt_key:
+    url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+  check_mode: false
+
+- name: Add GitLab-Runner APT repository
+  apt_repository:
+    repo: "{{ item }} https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main"
+    update_cache: false
+    filename: gitlab-runner
+  check_mode: false
+  with_items:
+    - deb
+    - deb-src
+
+- name: Setup APT pinning for the runner
+  template:
+    src: apt/pin-gitlab-runner.pref.j2
+    dest: /etc/apt/preferences.d/pin-gitlab-runner.pref
+
+- name: Install GitLab-Runner
+  apt:
+    name: gitlab-runner
+    update_cache: yes
+
+- name: Configure gitlab-runner
+  template:
+    src: gitlab-runner/config.toml.j2
+    dest: /etc/gitlab-runner/config.toml
+  notify: Restart gitlab-runner
+
+- name: Remove .bash_logout
+  file:
+    path: /home/gitlab-runner/.bash_logout
+    state: absent

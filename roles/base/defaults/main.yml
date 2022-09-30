@@ -1,0 +1,51 @@
+base_packages:
+  - ansible
+  - bash-completion
+  - bzip2
+  - ca-certificates
+  - command-not-found
+  - curl
+  - dnsutils
+  - docker-ctop
+  - dog
+  - duf
+  - figlet
+  - git
+  - git-lfs
+  - glances
+  - gnupg2
+  - gparted
+  - gzip
+  - htop
+  - jq
+  - less
+  - man-db
+  - moreutils
+  - ncdu
+  - ncurses-bin
+  - ncurses-term
+  - openssh-client
+  - openssh-server
+  - openssh-sftp-server
+  - perl
+  - pigz
+  - "{{ python_package_version }}-argcomplete"
+  - "{{ python_package_version }}-jmespath"
+  - "{{ python_package_version }}-lxml"
+  - "{{ python_package_version }}-netaddr"
+  - python3
+  - python3-apt
+  - rsync
+  - socat
+  - software-properties-common
+  - sudo
+  - tar
+  - unzip
+  - wget
+  - xauth
+  - xz-utils
+  - yq
+  - zip
+  - zsh
+  
+timezone: Europe/Berlin

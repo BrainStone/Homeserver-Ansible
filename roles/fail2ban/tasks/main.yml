@@ -1,0 +1,72 @@
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+
+- name: remove default Jail
+  file:
+    dest: /etc/fail2ban/jail.d/defaults-debian.conf
+    state: absent
+  notify: Restart fail2ban
+
+- name: sshd Jail
+  vars:
+    fail2ban_jail_name: sshd
+    fail2ban_filter: sshd
+    fail2ban_port: ssh
+    fail2ban_logpath: sshd_log
+  template:
+    src: fail2ban.conf.j2
+    dest: "/etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.conf"
+  notify: Restart fail2ban
+
+- name: mysql Jail
+  vars:
+    fail2ban_jail_name: mysql
+    fail2ban_filter: mysqld-auth
+    fail2ban_port: mysql
+    fail2ban_logpath: mysql_log
+    fail2ban_backend: mysql_backend
+  template:
+    src: fail2ban.conf.j2
+    dest: "/etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.conf"
+  when: "'mysql' in group_names"
+  notify: Restart fail2ban
+
+- name: phpmyadmin Jail
+  vars:
+    fail2ban_jail_name: phpmyadmin
+    fail2ban_filter: phpmyadmin-syslog
+    fail2ban_port: http,https
+    fail2ban_logpath: syslog_authpriv
+    fail2ban_backend: syslog_backend
+  template:
+    src: fail2ban.conf.j2
+    dest: "/etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.conf"
+  when: "'mysql' in group_names"
+  notify: Restart fail2ban
+
+- name: Pterodactyl SFTP Filter
+  template:
+    src: filters/pterodactyl-sftp.conf.j2
+    dest: /etc/fail2ban/filter.d/pterodactyl-sftp.conf
+  when: "'mc_host' in group_names"
+  notify: Restart fail2ban
+
+- name: Pterodactyl SFTP Jail
+  vars:
+    fail2ban_jail_name: pterodactyl-sftp
+    fail2ban_filter: pterodactyl-sftp
+    fail2ban_port: 2022
+    fail2ban_raw_backend: systemd
+  template:
+    src: fail2ban.conf.j2
+    dest: "/etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.conf"
+  when: "'mc_host' in group_names"
+  notify: Restart fail2ban
+
+- name: Enable fail2ban
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: true
