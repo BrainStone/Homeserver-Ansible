@@ -6,4 +6,4 @@ certbot_email: !vault |
   6535393833333766650a333033666466616539386236643136313436643430353564336337393330
   65363239396438633633326361323832653162323431656262613239323239386133
 certbot_base_parameters: --agree-tos --non-interactive 
-certbot_auth_parameters: certonly --apache
+certbot_auth_parameters: certonly --nginx

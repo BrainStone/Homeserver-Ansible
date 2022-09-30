@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+##
+# PHP
+##
+
+upstream php {
+	server unix:/var/run/php/php{{ php_versions[0] }}-fpm.sock;
+}
+{% for version in php_versions %}
+
+upstream php{{ version }} {
+	server unix:/var/run/php/php{{ version }}-fpm.sock;
+}
+{% endfor %}

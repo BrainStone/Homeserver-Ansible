@@ -1,0 +1,22 @@
+- name: Create Proxy Certificates
+  include_role:
+    name: generate_certificate
+  with_items: "{{ nginx_reverse_proxies | dict2items }}"
+  vars:
+    certificate_hostname: "{{ item.key }}"
+
+- name: Template Proxy Configs
+  template:
+    src: reverse_proxies/proxy_template.nginx.j2
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  notify: Reload nginx
+  with_items: "{{ nginx_reverse_proxies | dict2items }}"
+
+- name: Enable Proxy Sites
+  file:
+    src: "../sites-available/{{ item.key }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ item.key }}.conf"
+    force: true
+    state: link
+  notify: Reload nginx
+  with_items: "{{ nginx_reverse_proxies | dict2items }}"

@@ -1,0 +1,73 @@
+- name: Add SURY PPA GPG key
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+  check_mode: false
+
+- name: Add SURY PPA APT repository
+  apt_repository:
+    repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+    update_cache: true
+    filename: php
+  check_mode: false
+
+- name: Install nginx-full
+  apt:
+    pkg: >
+      {{
+        ['nginx-full', 'python3-certbot-nginx'] +
+        (['php'] | product(php_versions, [''] + (['-'] | product(php_extra_packages) | map('join') | list)) | map('join') | list)
+      }}
+    state: present
+
+- name: Remove default config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Reload nginx
+
+- name: Create /etc/ssl/nginx
+  file:
+    path: /etc/ssl/nginx
+    state: directory
+
+- name: Generate dhparams
+  shell: openssl dhparam -dsaparam -out /etc/ssl/nginx/dhparams.pem 4096
+  args:
+    creates: /etc/ssl/nginx/dhparams.pem
+  notify: Reload nginx
+
+- name: Protect dhparams
+  file:
+    path: /etc/ssl/nginx/dhparams.pem
+    mode: 0600
+  ignore_errors: "{{ ansible_check_mode }}"
+  notify: Reload nginx
+
+- name: Download Let's Encrypt Root Cert
+  get_url:
+    url: https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem
+    dest: /etc/ssl/nginx/lets-encrypt-x3-cross-signed.pem
+    force: true
+  ignore_errors: "{{ ansible_check_mode }}"
+  notify: Reload nginx
+
+- name: Create /etc/nginx/global
+  file:
+    path: /etc/nginx/global
+    state: directory
+
+- name: Create global nginx configs
+  template:
+    src: "{{ item }}"
+    dest: "/etc/nginx/{{ item | regex_replace('^.+\\.\\./templates/install/(.+)\\.j2$', '\\1') }}"
+  notify: Reload nginx
+  with_fileglob:
+    - ../templates/install/*.j2
+    - ../templates/install/conf.d/*.j2
+    - ../templates/install/global/*.j2
+
+- name: Enable nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: true

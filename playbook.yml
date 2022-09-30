@@ -10,6 +10,7 @@
     - { name: fail2ban, tags: [ fail2ban, security ] }
     
     # Early stuff
+    - { name: nginx, tags: nginx }
     - { name: certbot, tags: [ certbot, security ] }
     - { name: docker, tags: docker }
     

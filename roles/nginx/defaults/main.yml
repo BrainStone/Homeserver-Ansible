@@ -1,0 +1,14 @@
+php_versions:
+  - "8.1"
+
+php_extra_packages:
+  - bz2
+  - cli
+  - curl
+  - fpm
+  - mbstring
+  - mysql
+  - xml
+  - zip
+
+nginx_reverse_proxies: { }
