@@ -1,0 +1,43 @@
+variables:
+  ANSIBLE_FORCE_COLOR: "true"
+  ANSIBLE_HOST_KEY_CHECKING: "false"
+
+stages:
+  - check
+  - deploy
+
+# Default cache settings
+cache:
+  - key: "Galaxy - $CI_COMMIT_REF_NAME"
+    paths:
+      - .ansible/roles/
+      - .ansible/collections/
+    policy: pull-push
+  - key: "Facts - $CI_COMMIT_REF_NAME"
+    paths:
+      - .ansible/facts/
+    policy: pull-push
+
+before_script:
+  - mkdir -p .ansible/{roles,collections,facts} /root/.ansible /tmp/ansible
+  - ln -s "${PWD}/.ansible/roles/" /root/.ansible/roles
+  - ln -s "${PWD}/.ansible/collections/" /root/.ansible/collections
+  - ln -s "${PWD}/.ansible/facts/" /tmp/ansible/facts
+  - ansible-galaxy install -r requirements.yml
+  - ansible-galaxy collection install -r requirements.yml
+
+# Tasks
+check:
+  stage: check
+  script:
+    - ./run.sh -C
+
+deploy:
+  stage: deploy
+  needs:
+    - check
+  script:
+    - ./run.sh
+  only:
+    refs:
+      - master
