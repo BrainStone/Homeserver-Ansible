@@ -6,7 +6,7 @@
     state: present
 
 - name: Set certbot Notification E-Mail Address
-  shell: "certbot {{ certbot_base_parameters }} register -m certbot@rahasia.de --no-eff-email"
+  shell: "certbot {{ certbot_base_parameters }} register -m \"{{ certbot_email }}\" --no-eff-email"
   args:
     creates: /etc/letsencrypt/accounts
 
