@@ -53,33 +53,7 @@ leapsectz right/UTC
 # Time servers
 ##############
 
-# Other hosts
-# We want them all as peers to keep time in sync
-{% for host in groups['all'] if host != inventory_hostname %}
-peer   {{ "%-25s" | format(host) }} key 1 maxpoll 0 polltarget 20 xleave burst
-{% endfor %}
-
-# External hosts
-{% if 'ovh' in group_names %}
-# OVH
-server ntp0.ovh.net              iburst
-
-{% endif %}
 # Good/Reliable public time servers
 server ptbtime1.ptb.de           iburst
 server ptbtime2.ptb.de           iburst
 server ptbtime3.ptb.de           iburst
-
-# Since these 3 servers are stratum 1, we are automatically stratum 2. We're setting this
-# excplicitly because if we start using our other nodes as master nodes, we get higher a stratum
-local stratum 2
-
-######################
-# Server configuration
-######################
-
-# Allow other hosts
-# We trust them and allow them to do essentially whatever they want
-{% for host in groups['all'] if host != inventory_hostname %}
-allow {{ host }}
-{% endfor %}
