@@ -12,7 +12,7 @@ borg_password: !vault |
 
 borg_paths_exclude:
   - /data/mc02.root.los-mineros-locos.de
-  
+
 gitlab_runner_id: 3
 
 gitlab_runner_token: !vault |
@@ -22,3 +22,12 @@ gitlab_runner_token: !vault |
   39653936343132323961306666303230363465656137353938316331333264646662376563656236
   6439303537393132650a616538363535323638376135653266336664323635646238656434353166
   37323262336130363630336536666131303339646232633037393666666131636239
+
+php_extra_packages:
+  - intl
+  - sqlite3
+  - xml
+
+nginx_php_sites:
+  brainbox.project-creative.net:
+    root: /var/www/html
