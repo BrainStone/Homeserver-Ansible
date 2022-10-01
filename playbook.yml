@@ -16,3 +16,4 @@
     
     # Software stuff
     - { name: gitlab_runner, tags: gitlab_runner, when: gitlab_runner_token is defined }
+    - { name: r_pufky.pihole, tags: pihole }

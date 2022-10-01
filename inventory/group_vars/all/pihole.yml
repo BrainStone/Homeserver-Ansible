@@ -1,0 +1,16 @@
+pihole_webpassword: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  64333462343232633831326239313764303961346362366666613063663731303862653362383839
+  3530643234316661316230363761336531393930616439370a623961663335613461323361663765
+  62333363306561313131346630666435623830613362346134366433636364343065383132396538
+  3533643139393334650a613235393062333133303064623631346163376536636662383765343239
+  34383165336164626135343561346434323564353033356139373839613038363265
+  
+pihole_use_cli: true
+pihole_install_web_server: false
+pihole_lighttpd_enabled: false
+pihole_pihole_interface: "{{ ansible_default_ipv4.interface }}"
+pihole_ipv4_address: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ipaddr('address/prefix') }}"
+pihole_ipv6_address: ""
+pihole_pihole_dns_1: "{{ ansible_dns.nameservers | ipv4() | first | default('1.1.1.1') }}#53"
+pihole_pihole_dns_2: ""
