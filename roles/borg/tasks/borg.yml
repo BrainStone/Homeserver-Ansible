@@ -17,6 +17,7 @@
     path: "{{ borg_repository }}"
     mode: 0700
   tags: borgexclude
+  notify: Create server repository
 
 - name: Borg default exclusions
   copy:
