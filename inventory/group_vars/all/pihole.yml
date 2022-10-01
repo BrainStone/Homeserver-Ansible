@@ -5,12 +5,17 @@ pihole_webpassword: !vault |
   62333363306561313131346630666435623830613362346134366433636364343065383132396538
   3533643139393334650a613235393062333133303064623631346163376536636662383765343239
   34383165336164626135343561346434323564353033356139373839613038363265
-  
+
+ip_with_netmask: "{{ ansible_default_ipv4.address }}/{{ ansible_default_ipv4.netmask }}"
+
 pihole_use_cli: true
 pihole_install_web_server: false
 pihole_lighttpd_enabled: false
-pihole_pihole_interface: "{{ ansible_default_ipv4.interface }}"
-pihole_ipv4_address: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ipaddr('address/prefix') }}"
-pihole_ipv6_address: ""
+pihole_dhcp_active: true
+pihole_dhcp_start: "{{ ip_with_netmask | nthhost(100) }}"
+pihole_dhcp_end: "{{ ip_with_netmask | nthhost(200) }}"
+pihole_dhcp_leasetime: 744 # one month
+pihole_pihole_domain: "speedport.ip"
+pihole_dhcp_ipv6: true
 pihole_pihole_dns_1: "1.1.1.1#53"
 pihole_pihole_dns_2: "1.0.0.1#53"
