@@ -32,17 +32,27 @@ server {
 	include global/headers.conf;
 	client_max_body_size 0;
 
+	root {{ item.value.root | default('/var/www/html') }};
+	index index.html index.htm index.php;
+	try_files $uri $uri/ $uri/index.php $uri/index.html $uri/index.htm =404;
+	disable_symlinks off;
+
 	access_log /var/log/nginx/{{ item.key }}.access.log full;
 	error_log /var/log/nginx/{{ item.key }}.error.log error;
 
-	location / {
-		proxy_pass                         http://{{ item.value.host }}:{{ item.value.port }}/;
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
 
-		proxy_set_header Host              $host;
-		proxy_set_header X-Real-IP         $remote_addr;
-		proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-		proxy_set_header X-Forwarded-Proto $scheme;
-		proxy_set_header X-Forwarded-Host  $host;
-		proxy_set_header X-Forwarded-Port  $server_port;
+		fastcgi_pass php{{ item.value.php_version | default('') }};
+		fastcgi_index index.php;
+		include fastcgi.conf;
+	}
+  
+	#  deny access to .htaccess files, if Apache's document root
+	# concurs with nginx's one
+	#
+	location ~ /\.ht {
+		deny all;
 	}
 }

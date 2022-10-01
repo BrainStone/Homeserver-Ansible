@@ -14,8 +14,16 @@
   apt:
     pkg: >
       {{
-        ['nginx-full', 'python3-certbot-nginx'] +
-        (['php'] | product(php_versions, [''] + (['-'] | product(php_extra_packages) | map('join') | list)) | map('join') | list)
+        [
+          'nginx-full',
+          'python3-certbot-nginx',
+        ] +
+        (['php'] | product(php_versions, [''] + (['-'] | product(
+          (
+            ['fpm', 'cgi', 'cli', 'mbstring'] +
+            php_extra_packages
+          ) | unique
+        ) | map('join') | list)) | map('join') | list)
       }}
     state: present
 
