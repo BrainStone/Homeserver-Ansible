@@ -10,19 +10,19 @@ stages:
 cache:
   - key: "Galaxy - $CI_COMMIT_REF_NAME"
     paths:
-      - .ansible/roles/
-      - .ansible/collections/
+      - .ansible/roles$CI_CONCURRENT_PROJECT_ID/
+      - .ansible/collections$CI_CONCURRENT_PROJECT_ID/
     policy: pull-push
   - key: "Facts - $CI_COMMIT_REF_NAME"
     paths:
-      - .ansible/facts/
+      - .ansible/facts$CI_CONCURRENT_PROJECT_ID/
     policy: pull-push
 
 before_script:
-  - mkdir -p .ansible/{roles,collections}$CI_CONCURRENT_PROJECT_ID .ansible/facts ~/.ansible /tmp/ansible
+  - mkdir -p .ansible/{roles,collections,facts}$CI_CONCURRENT_PROJECT_ID ~/.ansible /tmp/ansible
   - ln -s "${PWD}/.ansible/roles$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/roles
   - ln -s "${PWD}/.ansible/collections$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/collections
-  - ln -s "${PWD}/.ansible/facts/" /tmp/ansible/facts
+  - ln -s "${PWD}/.ansible/facts$CI_CONCURRENT_PROJECT_ID/" /tmp/ansible/facts
   - ansible-galaxy install -r requirements.yml
   - ansible-galaxy collection install -r requirements.yml
 
