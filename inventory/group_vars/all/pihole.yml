@@ -12,5 +12,5 @@ pihole_lighttpd_enabled: false
 pihole_pihole_interface: "{{ ansible_default_ipv4.interface }}"
 pihole_ipv4_address: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ipaddr('address/prefix') }}"
 pihole_ipv6_address: ""
-pihole_pihole_dns_1: "{{ ansible_dns.nameservers | ipv4() | first | default('1.1.1.1') }}#53"
-pihole_pihole_dns_2: ""
+pihole_pihole_dns_1: "1.1.1.1#53"
+pihole_pihole_dns_2: "1.0.0.1#53"
