@@ -6,23 +6,8 @@ stages:
   - check
   - deploy
 
-# Default cache settings
-cache:
-  - key: "Galaxy - $CI_COMMIT_REF_NAME"
-    paths:
-      - .ansible/roles$CI_CONCURRENT_PROJECT_ID/
-      - .ansible/collections$CI_CONCURRENT_PROJECT_ID/
-    policy: pull-push
-  - key: "Facts - $CI_COMMIT_REF_NAME"
-    paths:
-      - .ansible/facts$CI_CONCURRENT_PROJECT_ID/
-    policy: pull-push
-
 before_script:
-  - mkdir -p .ansible/{roles,collections,facts}$CI_CONCURRENT_PROJECT_ID ~/.ansible /tmp/ansible
-  - ln -srf "${PWD}/.ansible/roles$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/roles
-  - ln -srf "${PWD}/.ansible/collections$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/collections
-  - ln -srf "${PWD}/.ansible/facts$CI_CONCURRENT_PROJECT_ID/" /tmp/ansible/facts
+  - mkdir -p ~/.ansible /tmp/ansible
   - ansible-galaxy install -r requirements.yml
   - ansible-galaxy collection install -r requirements.yml
 
