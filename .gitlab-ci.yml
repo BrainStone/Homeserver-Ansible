@@ -28,11 +28,13 @@ before_script:
 
 # Tasks
 check:
+  resource_group: ansible
   stage: check
   script:
     - ./run.sh -C
 
 deploy:
+  resource_group: ansible
   stage: deploy
   needs:
     - check
