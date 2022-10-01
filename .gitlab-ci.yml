@@ -20,9 +20,9 @@ cache:
 
 before_script:
   - mkdir -p .ansible/{roles,collections,facts}$CI_CONCURRENT_PROJECT_ID ~/.ansible /tmp/ansible
-  - ln -s "${PWD}/.ansible/roles$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/roles
-  - ln -s "${PWD}/.ansible/collections$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/collections
-  - ln -s "${PWD}/.ansible/facts$CI_CONCURRENT_PROJECT_ID/" /tmp/ansible/facts
+  - ln -srf "${PWD}/.ansible/roles$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/roles
+  - ln -srf "${PWD}/.ansible/collections$CI_CONCURRENT_PROJECT_ID/" ~/.ansible/collections
+  - ln -srf "${PWD}/.ansible/facts$CI_CONCURRENT_PROJECT_ID/" /tmp/ansible/facts
   - ansible-galaxy install -r requirements.yml
   - ansible-galaxy collection install -r requirements.yml
 
