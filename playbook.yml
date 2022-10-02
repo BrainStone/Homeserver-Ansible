@@ -1,7 +1,7 @@
 - hosts: homeserver
   roles:
     # Most important things
-    - { name: auth, tags: [ auth, security ] }
+    - { name: brainstone.user_management, tags: [ auth, security, user_management ] }
     - { name: base, tags: base }
     
     # Normal stuff

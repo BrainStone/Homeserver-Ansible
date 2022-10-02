@@ -2,4 +2,6 @@ collections:
   - community.general
 
 roles:
+  - src: brainstone.user_management
+
   - src: r_pufky.pihole

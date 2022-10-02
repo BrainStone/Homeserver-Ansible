@@ -1,8 +1,6 @@
-authorized_users: "{{ (((all_user_attrs | dict2items | selectattr('value.state', 'defined') | rejectattr('value.state', 'eq', 'absent') | list) + (all_user_attrs | dict2items | rejectattr('value.state', 'defined') | list)) | items2dict).keys() }}"
+user_management_ansible_auth_key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcRuKFHiOV6ct6KZJaYG//+jW43phDlutizsFX1cUco 83:96:c5:e6:0d:d2:d4:9d:a8:6a:0d:d4:46:d0:03:3b Ansible Master Key'
 
-unauthorized_users: "{{ (all_user_attrs | dict2items | selectattr('value.state', 'defined') | selectattr('value.state', 'eq', 'absent') | list | items2dict).keys() }}"
-  
-all_user_attrs:
+user_management_all_user_attrs:
   # Existing users
   root:
     admin: yes
