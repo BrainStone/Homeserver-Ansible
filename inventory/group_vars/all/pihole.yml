@@ -12,10 +12,11 @@ pihole_use_cli: true
 pihole_install_web_server: false
 pihole_lighttpd_enabled: false
 pihole_dhcp_active: true
-pihole_dhcp_start: "{{ ip_with_netmask | nthhost(100) }}"
-pihole_dhcp_end: "{{ ip_with_netmask | nthhost(200) }}"
+pihole_dhcp_start: "{{ ip_with_netmask | ansible.utils.nthhost(100) }}"
+pihole_dhcp_end: "{{ ip_with_netmask | ansible.utils.nthhost(200) }}"
 pihole_dhcp_leasetime: 744 # one month
 pihole_pihole_domain: "speedport.ip"
 pihole_dhcp_ipv6: true
 pihole_pihole_dns_1: "1.1.1.1#53"
 pihole_pihole_dns_2: "1.0.0.1#53"
+pihole_dnsmasq_listening: "local"
