@@ -2,6 +2,4 @@ collections:
   - community.general
 
 roles:
-  - src: https://github.com/BrainStone/ansible_pihole.git
-    version: main
-    name: r_pufky.pihole
+  - src: r_pufky.pihole
