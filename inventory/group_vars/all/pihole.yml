@@ -27,4 +27,9 @@ pihole_domain_blocklists:
     type: 0
     domain: 's.youtube.com'
     enabled: true
-    comment: 'Allow YouTube History'
+    comment: 'Allow YouTube history'
+  - id: 2
+    type: 0
+    domain: 'incoming.telemetry.mozilla.org'
+    enabled: true
+    comment: 'Allow Firefox telemetry'
