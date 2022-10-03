@@ -13,3 +13,5 @@ user_management_all_user_attrs:
   # Removed users
   debian:
     state: absent
+  
+user_management_sshd_local_permit_root_login: true
