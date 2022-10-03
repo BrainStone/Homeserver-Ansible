@@ -12,7 +12,7 @@
 - name: Generates key
   shell: |
     cp .env.template .env
-    php{{ php_version }} artisan key:generate
+    php{{ heimdall_php_version }} artisan key:generate
   args:
     chdir: "{{ heimdall_base_dir }}"
     creates: "{{ heimdall_base_dir }}/.env"
