@@ -33,20 +33,25 @@ server {
 	client_max_body_size 0;
 
 	root {{ item.value.root | default('/var/www/html') }};
-	index index.html index.htm index.php;
-	try_files $uri $uri/ $uri/index.php $uri/index.html $uri/index.htm =404;
+	index index.php index.html index.htm;
+	try_files
+		$uri $uri/
+		   $uri/index.php?$query_string
+		$uri/../index.php?$query_string
+		       /index.php?$query_string;
 	disable_symlinks off;
 
 	access_log /var/log/nginx/{{ item.key }}.access.log full;
 	error_log /var/log/nginx/{{ item.key }}.error.log error;
 
-	location ~ \.php$ {
-		fastcgi_split_path_info ^(.+\.php)(/.+)$;
-		# NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+	location = /favicon.ico {
+		access_log off;
+		log_not_found off;
+	}
 
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
 		fastcgi_pass php{{ item.value.php_version | default('') }};
-		fastcgi_index index.php;
-		include fastcgi.conf;
 	}
   
 	#  deny access to .htaccess files, if Apache's document root

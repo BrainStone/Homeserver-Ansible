@@ -24,10 +24,29 @@ gitlab_runner_token: !vault |
   37323262336130363630336536666131303339646232633037393666666131636239
 
 php_extra_packages:
+  - bcmath
+  - ctype
+  - curl
   - intl
+  - mysql
+  - pdo
+  - pgsql
   - sqlite3
+  - tokenizer
   - xml
+  - zip
+
+# Setting these defaults manually because they are used in other variables
+heimdall_php_version: 8.0
+heimdall_base_dir: /var/www/heimdall
+
+php_versions:
+  - 8.1
+  - "{{ heimdall_php_version }}"
 
 nginx_php_sites:
+  brainbox.project-creative.net:
+    root: "{{ heimdall_base_dir }}/public"
+    php_version: "{{ heimdall_php_version }}"
   pihole.brainbox.project-creative.net:
     root: /var/www/html
