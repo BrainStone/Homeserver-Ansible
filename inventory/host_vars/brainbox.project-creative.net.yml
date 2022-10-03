@@ -29,5 +29,5 @@ php_extra_packages:
   - xml
 
 nginx_php_sites:
-  brainbox.project-creative.net:
+  pihole.brainbox.project-creative.net:
     root: /var/www/html
