@@ -50,6 +50,7 @@ nginx_php_sites:
     php_version: "{{ heimdall_php_version }}"
   pihole.brainbox.project-creative.net:
     root: /var/www/html
+    secure: true
   
 vouch_nextcloud_client_id: !vault |
   $ANSIBLE_VAULT;1.1;AES256

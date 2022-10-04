@@ -30,6 +30,9 @@ server {
 
 	include global/ssl.conf;
 	include global/headers.conf;
+	{% if item.value.secure | default(False) %}
+	include global/auth.conf;
+	{% endif %}
 	client_max_body_size 0;
 
 	access_log /var/log/nginx/{{ item.key }}.access.log full;

@@ -9,6 +9,8 @@
   template:
     src: reverse_proxies/php_template.nginx.j2
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+    lstrip_blocks: true
+    trim_blocks: true
   notify: Reload nginx
   with_items: "{{ nginx_php_sites | dict2items }}"
 

@@ -30,6 +30,9 @@ server {
 
 	include global/ssl.conf;
 	include global/headers.conf;
+	{% if item.value.secure | default(False) %}
+	include global/auth.conf;
+	{% endif %}
 	client_max_body_size 0;
 
 	root {{ item.value.root | default('/var/www/html') }};
