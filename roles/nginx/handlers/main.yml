@@ -1,4 +1,9 @@
 - name: Reload nginx
   systemd:
-    name: nginx
+    name: nginx.service
     state: reloaded
+
+- name: Restart vouch-proxy
+  systemd:
+    name: vouch-proxy.service
+    state: restarted

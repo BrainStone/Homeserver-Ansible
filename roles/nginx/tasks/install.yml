@@ -10,7 +10,7 @@
     filename: php
   check_mode: false
 
-- name: Install nginx-full
+- name: Install nginx-full and PHP
   apt:
     pkg: >
       {{

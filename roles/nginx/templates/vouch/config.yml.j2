@@ -1,0 +1,31 @@
+# {{ ansible_managed }}
+
+# Vouch Proxy configuration
+# Vouch Proxy running with Nextcloud Authentication
+
+vouch:
+  listen: 127.0.0.1
+  port: {{ vouch_port }}
+  
+  # domains:
+  # valid domains that the jwt cookies can be set into
+  # the callback_urls will be to these domains
+  domains:
+    {{ vouch_domains | to_nice_yaml | indent(width=4) }}
+
+  cookie:
+    # allow the jwt/cookie to be set into http://yourdomain.com (defaults to true, requiring https://yourdomain.com) 
+    secure: true
+
+oauth:
+  provider: nextcloud
+  client_id: "{{ vouch_nextcloud_client_id }}"
+  client_secret: "{{ vouch_nextcloud_client_secret }}"
+  auth_url: "{{ vouch_nextcloud_url }}/apps/oauth2/authorize"
+  token_url: "{{ vouch_nextcloud_url }}/apps/oauth2/api/v1/token"
+  user_info_url: "{{ vouch_nextcloud_url }}/ocs/v2.php/cloud/user?format=json"
+  scopes:
+    - openid
+    - email
+    - profile
+  callback_url: "https://{{ vouch_host_name }}/auth"

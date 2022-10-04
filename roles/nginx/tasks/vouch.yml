@@ -1,0 +1,71 @@
+---
+- name: Install go
+  apt:
+    default_release: "{{ ansible_distribution_release | lower }}-backports"
+    name: golang-go
+    state: present
+
+- name: Create vouch-proxy user
+  user:
+    name: "{{ vouch_user }}"
+    comment: vouch-proxy User
+    state: present
+    password: !
+    system: true
+    home: "/home/{{ vouch_user }}"
+    create_home: true
+    shell: /bin/bash
+    password_lock: true
+  check_mode: false
+
+- name: Create vouch-proxy dir
+  file:
+    state: directory
+    path: "{{ vouch_path }}"
+    owner: "{{ vouch_user }}"
+    group: "{{ vouch_user }}"
+
+- name: Update vouch-proxy repo
+  git:
+    repo: "https://github.com/vouch/vouch-proxy.git"
+    dest: "{{ vouch_path }}"
+    clone: true
+    update: true
+    force: true
+    depth: 1
+    single_branch: true
+  become: true
+  become_user: "{{ vouch_user }}"
+  register: vouch_repo_updated
+
+- name: Build vouch-proxy
+  shell: |
+    ./do.sh goget
+    ./do.sh build
+  args:
+    chdir: "{{ vouch_path }}"
+  become: true
+  become_user: "{{ vouch_user }}"
+  when: vouch_repo_updated.changed
+  notify: Restart vouch-proxy
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Template vouch-proxy config
+  template:
+    src: vouch/config.yml.j2
+    dest: "{{ vouch_path }}/config/config.yml"
+  notify: Restart vouch-proxy
+
+- name: Template vouch-proxy systemd file
+  template:
+    src: vouch/vouch-proxy.service.j2
+    dest: /etc/systemd/system/vouch-proxy.service
+  notify: Restart vouch-proxy
+
+- name: Enable vouch-proxy.service
+  systemd:
+    name: vouch-proxy.service
+    daemon_reload: true
+    enabled: true
+    state: started
+  ignore_errors: "{{ ansible_check_mode }}"

@@ -1,0 +1,17 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Vouch Proxy
+After=network.target
+
+[Service]
+Type=simple
+User={{ vouch_user }}
+WorkingDirectory={{ vouch_path }}
+ExecStart={{ vouch_path }}/vouch-proxy
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=60s
+StartLimitBurst=3
+
+[Install]
+WantedBy=default.target

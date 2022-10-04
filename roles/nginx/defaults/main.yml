@@ -1,8 +1,25 @@
+---
+# PHP Settings
 php_versions:
   - "8.1"
 
 php_extra_packages: [ ]
 
+# nginx pages
 nginx_php_sites: { }
 
 nginx_reverse_proxies: { }
+
+# vouch-proxy settings
+vouch_base_domain: "{{ inventory_hostname }}"
+vouch_domains:
+  - "{{ vouch_base_domain }}"
+vouch_host_name: "vouch.{{ vouch_base_domain }}"
+vouch_port: 9100
+vouch_path: '/opt/vouch-proxy'
+vouch_user: 'vouch-proxy'
+
+# vouch-proxy nextcloud peer
+vouch_nextcloud_url: "https://cloud.project-creative.net"
+vouch_nextcloud_client_id: ""
+vouch_nextcloud_client_secret: ""

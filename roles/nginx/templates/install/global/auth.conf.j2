@@ -1,0 +1,29 @@
+# send all requests to the `/vouch_validate` endpoint for authorization
+auth_request /vouch_validate;
+
+location = /vouch_validate {
+	# forward the /vouch_validate request to Vouch Proxy
+	proxy_pass http://127.0.0.1:{{ vouch_port }}/validate;
+	# be sure to pass the original host header
+	proxy_set_header Host $http_host;
+
+	# Vouch Proxy only acts on the request headers
+	proxy_pass_request_body off;
+	proxy_set_header Content-Length "";
+
+	# optionally add X-Vouch-User as returned by Vouch Proxy along with the request
+	auth_request_set $auth_resp_x_vouch_user $upstream_http_x_vouch_user;
+
+	# these return values are used by the @error401 call
+	auth_request_set $auth_resp_jwt $upstream_http_x_vouch_jwt;
+	auth_request_set $auth_resp_err $upstream_http_x_vouch_err;
+	auth_request_set $auth_resp_failcount $upstream_http_x_vouch_failcount;
+}
+
+# if validate returns `401 not authorized` then forward the request to the error401block
+error_page 401 = @error401;
+
+location @error401 {
+	# redirect to Vouch Proxy for login
+	return 302 https://{{ vouch_host_name }}/login?url=$scheme://$http_host$request_uri&vouch-failcount=$auth_resp_failcount&X-Vouch-Token=$auth_resp_jwt&error=$auth_resp_err;
+}
