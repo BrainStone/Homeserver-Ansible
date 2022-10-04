@@ -12,8 +12,6 @@ nginx_reverse_proxies: { }
 
 # vouch-proxy settings
 vouch_base_domain: "{{ inventory_hostname }}"
-vouch_domains:
-  - "{{ vouch_base_domain }}"
 vouch_host_name: "vouch.{{ vouch_base_domain }}"
 vouch_port: 9100
 vouch_path: '/opt/vouch-proxy'
