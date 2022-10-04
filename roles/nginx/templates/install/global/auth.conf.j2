@@ -1,3 +1,19 @@
+# {{ ansible_managed }}
+
+# Allow any authentification method to work.
+# Next we'll specify 2 methods:
+# - allow/deny based on the client's IP
+# - auth_request
+# So in essence we first check if the client's IP is in one of our allowed (local) subnets and if
+# not we fall back to the vouch_validate request.
+satisfy any;
+
+# Check if are from a local net
+{% for subnet in vouch_local_networks %}
+allow {{ subnet }};
+{% endfor %}
+deny all;
+
 # send all requests to the `/vouch_validate` endpoint for authorization
 auth_request /vouch_validate;
 

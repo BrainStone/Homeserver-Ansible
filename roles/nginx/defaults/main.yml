@@ -17,6 +17,15 @@ vouch_port: 9100
 vouch_path: '/opt/vouch-proxy'
 vouch_user: 'vouch-proxy'
 
+# Automatically detect all local networks
+vouch_local_networks: >
+  {{
+    ansible_facts | dict2items |
+    selectattr('value.active', 'true') |
+    json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
+    map('ansible.utils.ipaddr', 'network/prefix')
+  }}
+
 # vouch-proxy nextcloud peer
 vouch_nextcloud_url: "https://cloud.project-creative.net"
 vouch_nextcloud_client_id: ""
