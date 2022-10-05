@@ -3,5 +3,7 @@ collections:
 
 roles:
   - src: brainstone.user_management
+    
+  - src: brainstone.wireguard_easy
 
   - src: r_pufky.pihole

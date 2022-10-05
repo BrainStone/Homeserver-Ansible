@@ -52,6 +52,12 @@ nginx_php_sites:
     root: /var/www/html
     secure: true
   
+nginx_reverse_proxies:
+  vpn.brainbox.project-creative.net:
+    host: 127.0.0.1
+    port: "{{ wiregaurd_easy_port }}"
+    secure: true
+  
 vouch_nextcloud_client_id: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   30656639353632303461636339616366343263663035623566333966353266316663376138363762
@@ -72,3 +78,7 @@ vouch_nextcloud_client_secret: !vault |
   31323337386662663138313662363934363636343738623231316631626563643832666263366331
   64313836313931373438363931663337393336356362633134373239626531326366616433346461
   31663739633364303461
+
+wiregaurd_easy_port: 9101
+wiregaurd_easy_wg_host: vpn.brainbox.project-creative.net
+wiregaurd_easy_wg_default_address: 10.42.69.0/24
