@@ -57,6 +57,10 @@ nginx_reverse_proxies:
     host: "{{ wiregaurd_easy_listen_ip }}"
     port: "{{ wiregaurd_easy_port }}"
     secure: true
+  home-assistant.brainbox.project-creative.net:
+    host: 127.0.0.1
+    port: "{{ ha_port }}"
+    secure: true
   
 vouch_nextcloud_client_id: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -83,3 +87,5 @@ wiregaurd_easy_listen_ip: '127.0.0.1'
 wiregaurd_easy_port: 9101
 wiregaurd_easy_wg_host: vpn.brainbox.project-creative.net
 wiregaurd_easy_wg_default_address: 10.42.69.0/24
+
+ha_port: 9102

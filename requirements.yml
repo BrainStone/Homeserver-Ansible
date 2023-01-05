@@ -4,8 +4,11 @@ collections:
 
 roles:
   - src: brainstone.user_management
-    
+
   - src: https://github.com/BrainStone/ansible_roles_wireguard_easy.git
     name: brainstone.wireguard_easy
 
   - src: r_pufky.pihole
+
+  - src: https://github.com/home-assistant-ecosystem/home-assistant-ansible
+    name: home-assistant-ecosystem.home-assistant

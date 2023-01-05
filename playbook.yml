@@ -19,3 +19,4 @@
     - { name: gitlab_runner, tags: gitlab_runner, when: gitlab_runner_token is defined }
     - { name: r_pufky.pihole, tags: [ pihole, nginx ] }
     - { name: brainstone.wireguard_easy, tags: [ wireguard_easy, wireguard, nginx ] }
+    - { name: home-assistant-ecosystem.home-assistant, tags: [ home_assistant, nginx ] }
