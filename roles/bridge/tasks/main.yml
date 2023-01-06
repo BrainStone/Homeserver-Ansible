@@ -1,0 +1,33 @@
+- name: "Disable {{ bridge_physical_interface }} directly"
+  nmcli:
+    type: ethernet
+    state: present
+    conn_name: Wired connection 1
+    ifname: "{{ bridge_physical_interface }}"
+    autoconnect: false
+
+- name: Create and configure bridge br0
+  community.general.nmcli:
+    type: bridge
+    state: present
+    conn_name: bridge-br0
+    ifname: br0
+    autoconnect: true
+    stp: false
+    ip4: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('address/prefix') }}"
+    gw4: "{{ ansible_default_ipv4.gateway }}"
+    dns4:
+      - "{{ ansible_default_ipv4.address }}"
+      - "{{ ansible_default_ipv4.gateway }}"
+    method6: auto
+    ip_privacy6: prefer-public-addr
+
+- name: "Add {{ bridge_physical_interface }} to bridge br0"
+  nmcli:
+    type: bridge-slave
+    state: present
+    conn_name: "bridge-slave-{{ bridge_physical_interface }}"
+    ifname: "{{ bridge_physical_interface }}"
+    master: br0
+    autoconnect: true
+    hairpin: false

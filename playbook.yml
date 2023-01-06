@@ -3,6 +3,9 @@
     # Most important things
     - { name: brainstone.user_management, tags: [ auth, security, user_management ] }
     - { name: base, tags: base }
+
+    # Network
+    - { name: bridge, tags: [bridge, network] }
     
     # Normal stuff
     - { name: borg, tags: borg }

@@ -19,6 +19,8 @@ base_packages:
   - htop
   - jq
   - less
+  - libvirt-clients
+  - libvirt-daemon-system
   - man-db
   - moreutils
   - ncdu
@@ -29,12 +31,14 @@ base_packages:
   - openssh-sftp-server
   - perl
   - pigz
+  - python3
+  - python3-apt
   - "{{ python_package_version }}-argcomplete"
   - "{{ python_package_version }}-jmespath"
   - "{{ python_package_version }}-lxml"
+  - "{{ python_package_version }}-libvirt"
   - "{{ python_package_version }}-netaddr"
-  - python3
-  - python3-apt
+  - qemu-system
   - rsync
   - socat
   - software-properties-common
