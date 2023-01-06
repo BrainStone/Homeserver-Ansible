@@ -10,6 +10,3 @@ roles:
     name: brainstone.wireguard_easy
 
   - src: r_pufky.pihole
-
-  - src: https://github.com/home-assistant-ecosystem/home-assistant-ansible
-    name: home-assistant-ecosystem.home-assistant

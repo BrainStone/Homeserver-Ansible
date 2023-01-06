@@ -1,0 +1,3 @@
+hassio_data: /usr/share/hassio
+hassio_mac_address: "{{ '52:54:00' | community.general.random_mac(seed=inventory_hostname) }}"
+hassio_ip: 1.2.3.4

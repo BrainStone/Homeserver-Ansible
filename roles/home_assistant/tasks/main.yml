@@ -1,0 +1,19 @@
+- name: "Download latest KVM image to {{ hassio_data }}"
+  shell: |
+    mkdir "{{ hassio_data }}"; \
+    curl -sSL https://api.github.com/repos/home-assistant/operating-system/releases/latest \
+    | jq -r '.assets[].browser_download_url | select(. | test(".+haos_ova-\\d+\\.\\d+\\.qcow2\\.xz"))' \
+    | xargs -t -- curl -sSL \
+    | xz -d > "{{ hassio_data }}/haos_ova.qcow2"
+  args:
+    creates: "{{ hassio_data }}/haos_ova.qcow2"
+
+- name: Define Home Assistant VM
+  community.libvirt.virt:
+    command: define
+    xml: "{{ lookup('template', 'hassio_vm.xml.j2') }}"
+- name: Start Home Assistant VM
+  community.libvirt.virt:
+    name: hassio
+    state: running
+    autostart: true
