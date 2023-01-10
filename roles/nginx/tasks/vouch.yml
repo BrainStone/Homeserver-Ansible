@@ -50,10 +50,18 @@
   notify: Restart vouch-proxy
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Template vouch-proxy config
+- name: Template vouch-proxy nextcloud config
   template:
-    src: vouch/config.yml.j2
+    src: vouch/config_nextcloud.yml.j2
     dest: "{{ vouch_path }}/config/config.yml"
+  when: ((vouch_nextcloud_client_id | length) > 0) and ((vouch_nextcloud_client_secret | length) > 0)
+  notify: Restart vouch-proxy
+
+- name: Template vouch-proxy homeassistant config
+  template:
+    src: vouch/config_homeassistant.yml.j2
+    dest: "{{ vouch_path }}/config/config.yml"
+  when: (vouch_homeassistant_url | length) > 0
   notify: Restart vouch-proxy
 
 - name: Template vouch-proxy systemd file

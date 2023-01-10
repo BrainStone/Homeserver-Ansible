@@ -31,3 +31,6 @@ vouch_local_networks: >
 vouch_nextcloud_url: "https://cloud.project-creative.net"
 vouch_nextcloud_client_id: ""
 vouch_nextcloud_client_secret: ""
+
+# vouch-proxy homeassistant peer
+vouch_homeassistant_url: ""

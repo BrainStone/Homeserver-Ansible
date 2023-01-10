@@ -12,5 +12,5 @@
       }}
 
 - include_tasks: vouch.yml
-  when: ((vouch_nextcloud_client_id | length) > 0) and ((vouch_nextcloud_client_secret | length) > 0)
+  when: (((vouch_nextcloud_client_id | length) > 0) and ((vouch_nextcloud_client_secret | length) > 0)) or ((vouch_homeassistant_url | length) > 0)
   tags: [ vouch ]
