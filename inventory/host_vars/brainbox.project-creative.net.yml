@@ -72,3 +72,42 @@ wiregaurd_easy_wg_default_address: 10.42.69.0/24
 
 hassio_data: /data/home-assistant
 hassio_ip: '10.69.42.40'
+
+influxdb_url: http://hassio.brainbox.project-creative.net:8086
+influxdb_database: homeAssistant
+influxdb_username: homeAssistant
+influxdb_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  39383633343137623163346230323862306362376632316530333635393965306430666463383236
+  6230613139386235376662666133646633316665383430370a653365613739633465313137393538
+  38303032356230646166313932343362613233633335653536313532623431393537663837653365
+  3037613838653939320a393030623761393364613335636661383239306133353736373033353762
+  66376362653532313065383937653165343065346232393763303561373535643762
+
+telegraf_agent_docker: false
+telegraf_agent_package_method: repo
+telegraf_agent_package_state: latest
+telegraf_agent_output:
+  - type: influxdb
+    config:
+      - urls = ["{{ influxdb_url }}"]
+      - database = "{{ influxdb_database }}"
+      - username = "{{ influxdb_username }}"
+      - password = "{{ influxdb_password }}"
+telegraf_plugins_default:
+  - plugin: cpu
+    config:
+      - percpu = true
+  - plugin: disk
+    tagpass:
+      - fstype = [ "ext4", "brtfs" ]
+  - plugin: io
+  - plugin: mem
+  - plugin: system
+  - plugin: swap
+  - plugin: netstat
+  - plugin: processes
+  - plugin: docker
+    config:
+      - endpoint = "unix:///var/run/docker.sock"
+      - timeout = "5s"

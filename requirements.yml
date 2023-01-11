@@ -10,3 +10,5 @@ roles:
     name: brainstone.wireguard_easy
 
   - src: r_pufky.pihole
+
+  - src: dj-wasabi.telegraf

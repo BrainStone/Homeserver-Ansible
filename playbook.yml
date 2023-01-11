@@ -23,3 +23,4 @@
     - { name: r_pufky.pihole, tags: [ pihole, nginx ] }
     - { name: brainstone.wireguard_easy, tags: [ wireguard_easy, wireguard, nginx ] }
     - { name: home_assistant, tags: [ home_assistant, nginx ] }
+    - { name: dj-wasabi.telegraf, tags: telegraf }
