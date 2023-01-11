@@ -100,7 +100,7 @@ telegraf_plugins_default:
       - percpu = true
   - plugin: disk
     tagpass:
-      - fstype = [ "ext4", "brtfs" ]
+      - fstype = [ "ext4", "btrfs" ]
   - plugin: io
   - plugin: mem
   - plugin: system
