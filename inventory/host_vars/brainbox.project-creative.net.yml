@@ -100,7 +100,7 @@ telegraf_plugins_default:
       - percpu = true
   - plugin: disk
     tagpass:
-      - fstype = [ "ext4", "btrfs" ]
+      - fstype = ["ext4", "btrfs", "xfs", "zfs"]
   - plugin: diskio
   - plugin: mem
   - plugin: system
@@ -112,6 +112,7 @@ telegraf_plugins_default:
     config:
       - endpoint = "unix:///var/run/docker.sock"
       - timeout = "5s"
-      - perdevice_include = true
+      - perdevice = false
+      - perdevice_include = ["cpu", "blkio", "network"]
   - plugin: chrony
   - plugin: wireguard
