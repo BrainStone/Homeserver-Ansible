@@ -113,3 +113,4 @@ telegraf_plugins_default:
       - endpoint = "unix:///var/run/docker.sock"
       - timeout = "5s"
   - plugin: chrony
+  - plugin: wireguard
