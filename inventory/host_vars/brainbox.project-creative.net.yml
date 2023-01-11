@@ -106,8 +106,10 @@ telegraf_plugins_default:
   - plugin: system
   - plugin: swap
   - plugin: netstat
+  - plugin: net
   - plugin: processes
   - plugin: docker
     config:
       - endpoint = "unix:///var/run/docker.sock"
       - timeout = "5s"
+  - plugin: chrony
