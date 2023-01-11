@@ -101,7 +101,7 @@ telegraf_plugins_default:
   - plugin: disk
     tagpass:
       - fstype = [ "ext4", "btrfs" ]
-  - plugin: io
+  - plugin: diskio
   - plugin: mem
   - plugin: system
   - plugin: swap
@@ -112,5 +112,6 @@ telegraf_plugins_default:
     config:
       - endpoint = "unix:///var/run/docker.sock"
       - timeout = "5s"
+      - perdevice_include = true
   - plugin: chrony
   - plugin: wireguard
