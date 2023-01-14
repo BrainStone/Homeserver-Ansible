@@ -120,7 +120,7 @@ telegraf_plugins_default:
   - plugin: exec
     config:
       - commands = ["/usr/local/bin/speedtest.sh"]
-      - timeout = "60s"
+      - timeout = "10m"
       - interval = "1h"
       - data_format = "json"
       - json_strict = true
