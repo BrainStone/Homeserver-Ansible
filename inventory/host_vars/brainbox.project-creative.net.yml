@@ -137,11 +137,11 @@ telegraf_plugins_default:
       - method = "exec"
       - arguments = ["-c", "5", "-W", "3", "-4"]
     tags:
-      - ipv4
+      - protocol = ipv4
   - plugin: ping
     config:
       - urls = ["speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
       - method = "exec"
       - arguments = ["-c", "5", "-W", "3", "-6"]
     tags:
-      - ipv6
+      - protocol = ipv6
