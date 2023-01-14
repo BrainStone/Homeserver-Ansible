@@ -1,0 +1,8 @@
+#! /bin/bash
+# {{ ansible_managed }}
+
+# 1. Get all close servers
+# 2. Extract their IDs
+# 3. Perform each speedtest
+# 4. Aggregate the data
+speedtest -L -f json | jq -r '.servers[].id' | xargs -n1 -- speedtest -f json -s | jq -scM

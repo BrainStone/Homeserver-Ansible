@@ -7,3 +7,9 @@
     path: /usr/bin/telegraf
     capability: CAP_NET_ADMIN+epi
     state: present
+
+- name: Template speedtest.sh for Telegraf
+  template:
+    src: speedtest.sh.j2
+    dest: /usr/local/bin/speedtest.sh
+    mode: 0755

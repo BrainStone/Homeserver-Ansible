@@ -116,3 +116,17 @@ telegraf_plugins_default:
       - perdevice_include = ["cpu", "blkio", "network"]
   - plugin: chrony
   - plugin: wireguard
+  - plugin: exec
+    config:
+      - commands = ["/usr/local/bin/speedtest.sh"]
+      - timeout = "60s"
+      - interval = "1h"
+      - data_format = "json"
+      - json_strict = true
+      - tag_keys = ["server_id", "server_name", "server_host", "server_location", "server_country"]
+      - fieldpass = ["ping_*", "download_*", "upload_*", "packetLoss", "isp", "server_ip"]
+      - json_string_fields = ["isp", "server_ip"]
+      - name_override = "speedtest"
+      - json_time_key = "timestamp"
+      - json_time_format = "2006-01-02T15:04:05Z07:00"
+      - json_timezone = "Local"
