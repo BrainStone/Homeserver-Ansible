@@ -84,6 +84,7 @@ influxdb_password: !vault |
   3037613838653939320a393030623761393364613335636661383239306133353736373033353762
   66376362653532313065383937653165343065346232393763303561373535643762
 
+telegraf_agent_hostname: "{{ ansible_nodename }}"
 telegraf_agent_docker: false
 telegraf_agent_package_method: repo
 telegraf_agent_package_state: latest
