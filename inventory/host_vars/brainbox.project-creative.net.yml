@@ -131,3 +131,17 @@ telegraf_plugins_default:
       - json_time_key = "timestamp"
       - json_time_format = "2006-01-02T15:04:05Z07:00"
       - json_timezone = "Local"
+  - plugin: ping
+    config:
+      - urls = ["speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - method = "exec"
+      - arguments = ["-c", "5", "-W", "3", "-4"]
+    tags:
+      - ipv4
+  - plugin: ping
+    config:
+      - urls = ["speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - method = "exec"
+      - arguments = ["-c", "5", "-W", "3", "-6"]
+    tags:
+      - ipv6
