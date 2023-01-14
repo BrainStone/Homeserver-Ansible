@@ -1,0 +1,9 @@
+- name: Install Telegraf
+  include_role:
+    name: dj-wasabi.telegraf
+
+- name: Allow telegraf to do network stuff
+  community.general.capabilities:
+    path: /usr/bin/telegraf
+    capability: CAP_NET_ADMIN+epi
+    state: present
