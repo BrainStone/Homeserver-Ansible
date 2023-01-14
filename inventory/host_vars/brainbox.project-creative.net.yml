@@ -133,14 +133,16 @@ telegraf_plugins_default:
       - json_timezone = "Local"
   - plugin: ping
     config:
-      - urls = ["speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - urls = ["google.com", "cloudflare.com", "speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - interval = "1m"
       - method = "exec"
       - arguments = ["-c", "5", "-W", "3", "-4"]
     tags:
       - protocol = "ipv4"
   - plugin: ping
     config:
-      - urls = ["speedtest.telemaxx.net", "voiptest.starface.de", "sp1.mbn-glasfaser.de", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speedtest.twl-kom.de", "testdebit.laregie.fr", "speedtest1.bc-networks.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - urls = ["google.com", "cloudflare.com", "speedtest.sit-cloud.de", "speedtest.pfalzkom.de", "speed1.dg-sys.net", "speedtest.indasys.cloud"]
+      - interval = "1m"
       - method = "exec"
       - arguments = ["-c", "5", "-W", "3", "-6"]
     tags:
