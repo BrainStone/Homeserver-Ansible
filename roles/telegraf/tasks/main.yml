@@ -13,3 +13,8 @@
     src: speedtest.sh.j2
     dest: /usr/local/bin/speedtest.sh
     mode: 0755
+
+- name: Template telegraf sudo config
+  template:
+    src: telegraf.j2
+    dest: /etc/sudoers.d/telegraf

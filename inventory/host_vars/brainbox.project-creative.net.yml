@@ -147,3 +147,6 @@ telegraf_plugins_default:
       - arguments = ["-c", "5", "-W", "3", "-6"]
     tags:
       - protocol = "ipv6"
+  - plugin: fail2ban
+    config:
+      - use_sudo = false
