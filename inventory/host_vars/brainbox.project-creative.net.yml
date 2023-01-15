@@ -149,4 +149,4 @@ telegraf_plugins_default:
       - protocol = "ipv6"
   - plugin: fail2ban
     config:
-      - use_sudo = false
+      - use_sudo = true
