@@ -97,9 +97,13 @@ telegraf_agent_output:
       - username = "{{ influxdb_username }}"
       - password = "{{ influxdb_password }}"
 telegraf_plugins_default:
+  - plugin: internal
+    config:
+      - collect_memstats = true
   - plugin: cpu
     config:
       - percpu = true
+  - plugin: kernel
   - plugin: disk
     tagpass:
       - fstype = ["ext4", "btrfs", "xfs", "zfs"]
