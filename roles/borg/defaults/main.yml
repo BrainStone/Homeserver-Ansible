@@ -15,6 +15,10 @@ borg_schedule_calendar: "hourly"
 # randomly spread backups across 10 minutes
 borg_schedule_delay: 600
 
+# Robustness settings
+borg_error_on_warn: false
+borg_always_cleanup: true
+
 # Backup cleanup, executed if backup completed with success
 borg_prune_keep_within: 1d
 borg_prune_keep_daily: 7
