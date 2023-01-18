@@ -14,6 +14,7 @@ borg_password: !vault |
 
 borg_paths_exclude:
   - /data/mc02.root.los-mineros-locos.de
+  - /data/Server Backup/old_backups
 
 gitlab_runner_id: 3
 
