@@ -6,6 +6,7 @@ RequiresMountsFor={{ borg_repository }}
 
 [Service]
 Type=oneshot
+EnvironmentFile=/root/.borg/passphrase
 {% if not borg_error_on_warn %}
 # Exit status 1 means warning and we're ok with that
 # https://borgbackup.readthedocs.io/en/stable/usage/general.html#return-codes
@@ -16,13 +17,17 @@ ExecStart={{ borg_binary_location }} create --verbose --stats \
 	--exclude-from /root/.borg/exclusions.conf \
 	--compression "{{ borg_compression }}" \
 	"{{ borg_repository }}::backup-{now:%%Y-%%m-%%d_%%H:%%M:%%S}" /
-{{ 'ExecStopPost' if borg_always_cleanup else 'ExecStartPost' }}={{ borg_binary_location }} prune -v --list \
+{% set cleanup_directive = 'ExecStopPost' if borg_always_cleanup else 'ExecStartPost' %}
+{{ cleanup_directive }}={{ borg_binary_location }} prune -v --list \
 	"--keep-within={{ borg_prune_keep_within }}" \
 	"--keep-daily={{ borg_prune_keep_daily }}" \
 	"--keep-weekly={{ borg_prune_keep_weekly }}" \
 	"--keep-monthly={{ borg_prune_keep_monthly }}" \
 	"--keep-yearly={{ borg_prune_keep_yearly }}"
-EnvironmentFile=/root/.borg/passphrase
+# Since 1.2.0 borg prune no longer actually frees any space. You need to call borg compact for that
+# However before 1.2.0 the command doesn't exist and will error, that's why we prefix it with -
+{{ cleanup_directive }}=-{{ borg_binary_location }} compact -v
+TimeoutSec=infinity
 
 # It's no priority
 Nice=19
