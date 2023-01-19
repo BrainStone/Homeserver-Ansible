@@ -12,13 +12,13 @@ EnvironmentFile=/root/.borg/passphrase
 # https://borgbackup.readthedocs.io/en/stable/usage/general.html#return-codes
 SuccessExitStatus=1
 {% endif %}
-ExecStart={{ borg_binary_location }} create --verbose --stats \
+ExecStart={{ borg_binary_location }} create -v --stats \
 	--exclude-caches \
 	--exclude-from /root/.borg/exclusions.conf \
 	--compression "{{ borg_compression }}" \
 	"{{ borg_repository }}::backup-{now:%%Y-%%m-%%d_%%H:%%M:%%S}" /
 {% set cleanup_directive = 'ExecStopPost' if borg_always_cleanup else 'ExecStartPost' %}
-{{ cleanup_directive }}={{ borg_binary_location }} prune -v --list \
+{{ cleanup_directive }}={{ borg_binary_location }} prune -v --list --stats \
 	"--keep-within={{ borg_prune_keep_within }}" \
 	"--keep-daily={{ borg_prune_keep_daily }}" \
 	"--keep-weekly={{ borg_prune_keep_weekly }}" \
@@ -29,7 +29,7 @@ ExecStart={{ borg_binary_location }} create --verbose --stats \
 {{ cleanup_directive }}=-{{ borg_binary_location }} compact -v
 TimeoutSec=infinity
 
-# It's no priority
+# Run with low IO priority to not hog the disk
 Nice=19
 IOSchedulingClass=2
 IOSchedulingPriority=7
