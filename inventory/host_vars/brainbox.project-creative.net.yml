@@ -129,7 +129,7 @@ telegraf_plugins_default:
       - interval = "1h"
       - data_format = "json"
       - json_strict = true
-      - tag_keys = ["server_id", "server_name", "server_host", "server_location", "server_country"]
+      - tag_keys = ["server_id", "server_name", "server_host", "server_location", "server_country", "ipFamily"]
       - fieldpass = ["ping_*", "download_*", "upload_*", "packetLoss", "isp", "server_ip"]
       - json_string_fields = ["isp", "server_ip"]
       - name_override = "speedtest"

@@ -4,8 +4,8 @@
 # 1. Get all close servers
 # 2. Extract their IDs
 # 3. Perform each speedtest
-# 4. Aggregate and filter the data
+# 4. Aggregate, filter and enricht the data
 speedtest -L -f json |
 	jq -r '.servers[].id' |
 	xargs -n1 -- speedtest -f json -s |
-	jq -scM '[.[] | select(.type == "result")]'
+	jq -scM '[.[] | select(.type == "result") | if ( .interface.externalIp | contains(":") ) then . + { "ipFamily": "IPv6" } else . + { "ipFamily": "IPv4" } end]'
