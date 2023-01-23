@@ -9,7 +9,7 @@
     src: rsyslog.conf.j2
     dest: "/etc/rsyslog.d/{{ rsyslog_rsyslog_prio }}-telegraf.conf"
   vars:
-    rsyslog_target_ip: |
+    rsyslog_target_ip: >-
       {{
         rsyslog_ip if (rsyslog_ip != "" and rsyslog_ip != "0.0.0.0")
         else (
