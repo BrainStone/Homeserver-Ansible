@@ -1,7 +1,7 @@
 - name: Template config for telegraf
   template:
     src: telegraf.conf.j2
-    dest: "/etc/telegraf.d/{{ rsyslog_telegraf_prio }}-rsyslog.conf"
+    dest: "/etc/telegraf/telegraf.d/{{ rsyslog_telegraf_prio }}-rsyslog.conf"
   notify: Restart telegraf
 
 - name: Template config for rsyslog
