@@ -5,7 +5,7 @@
     - { name: base, tags: base }
 
     # Network
-    - { name: bridge, tags: [bridge, network] }
+    - { name: bridge, tags: [ bridge, network ] }
     
     # Normal stuff
     - { name: borg, tags: borg }
@@ -24,3 +24,4 @@
     - { name: brainstone.wireguard_easy, tags: [ wireguard_easy, wireguard, nginx ] }
     - { name: home_assistant, tags: [ home_assistant, nginx ] }
     - { name: telegraf, tags: telegraf }
+    - { name: rsyslog_via_telegraf, tags: [ rsyslog, telegraf ] }

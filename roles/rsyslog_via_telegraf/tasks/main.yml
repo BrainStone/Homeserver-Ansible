@@ -1,0 +1,19 @@
+- name: Template config for telegraf
+  template:
+    src: telegraf.conf.j2
+    dest: "/etc/telegraf.d/{{ rsyslog_telegraf_prio }}-rsyslog.conf"
+  notify: Restart telegraf
+
+- name: Template config for rsyslog
+  template:
+    src: rsyslog.conf.j2
+    dest: "/etc/rsyslog.d/{{ rsyslog_rsyslog_prio }}-telegraf.conf"
+  vars:
+    rsyslog_target_ip: |
+      {{
+        rsyslog_ip if (rsyslog_ip != "" and rsyslog_ip != "0.0.0.0")
+        else (
+          "127.0.0.1" if rsyslog_protocol != "tcp6" else "::1"
+        )
+      }}
+  notify: Restart rsyslog

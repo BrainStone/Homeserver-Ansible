@@ -1,0 +1,9 @@
+# Allowed: tcp, tcp4, tcp6, udp
+rsyslog_protocol: tcp
+# Empty string means bind everything
+rsyslog_ip: ""
+rsyslog_port: 6514
+
+# File priorities
+rsyslog_telegraf_prio: 50
+rsyslog_rsyslog_prio: 50
