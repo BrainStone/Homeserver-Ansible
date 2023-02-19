@@ -70,6 +70,7 @@ wireguard_easy_listen_ip: '127.0.0.1'
 wireguard_easy_port: 9101
 wireguard_easy_wg_host: vpn.brainbox.project-creative.net
 wireguard_easy_wg_default_address: 10.42.69.0/24
+wireguard_easy_wg_persistent_keepalive: 25
 
 hassio_data: /data/home-assistant
 hassio_ip: '10.69.42.40'
