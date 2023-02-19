@@ -71,7 +71,9 @@ wireguard_easy_port: 9101
 wireguard_easy_wg_host: vpn.brainbox.project-creative.net
 wireguard_easy_wg_default_address: 10.42.69.0/24
 wireguard_easy_wg_persistent_keepalive: 25
-wireguard_easy_wg_allowed_ips: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('network/prefix') }}, {{ wireguard_easy_wg_default_address }}"
+wireguard_easy_wg_allowed_ips:
+  - "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('network/prefix') }}"
+  - "{{ wireguard_easy_wg_default_address }}"
 
 hassio_data: /data/home-assistant
 hassio_ip: '10.69.42.40'
