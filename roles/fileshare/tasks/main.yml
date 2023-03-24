@@ -1,0 +1,3 @@
+---
+- include_tasks: samba.yml
+- include_tasks: auto_iso.yml

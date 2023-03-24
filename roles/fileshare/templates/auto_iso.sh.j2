@@ -1,0 +1,44 @@
+#! /bin/bash
+# {{ ansible_managed }}
+
+DRIVE="${1:-/dev/dvd}"
+
+# Check that a CD/DVD drive was provided as the first argument
+if [[ ! -b "$DRIVE" ]]; then
+  echo "Usage: $0 /dev/dvd"
+  exit 1
+fi
+
+ISO_DIR="{{ fileshare_path }}/ISOs"
+
+# Get the volume label, size, and block size of the CD/DVD
+ISOINFO="$(isoinfo -d -i "$DRIVE")"
+LABEL="$(echo "$ISOINFO" | grep "Volume id:" | awk -F ": " '{print $2}')"
+NUMBLOCKS="$(echo "$ISOINFO" | grep -i "volume size" | awk '{print $NF}')"
+BLOCKSIZE="$(echo "$ISOINFO" | grep "Logical block size" | awk '{print $NF}')"
+
+# Create the output filename based on the volume label
+i=0
+while true; do
+  if [ $i -eq 0 ]; then
+    FILENAME="$ISO_DIR/$LABEL.iso"
+  else
+    FILENAME="$ISO_DIR/${LABEL}_$i.iso"
+  fi
+
+  [[ -f "$FILENAME" ]] || break
+
+  i="$((i + 1))"
+done
+
+# Calculate the size in bytes
+SIZE="$((NUMBLOCKS * BLOCKSIZE))"
+
+# Eject the CD/DVD drive and write the data to the ISO file
+eject -rt "$DRIVE" || exit
+
+mkdir -p "$ISO_DIR"
+truncate -s "$SIZE" "$FILENAME" &&
+pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS"
+chown -R nobody:nogroup "$ISO_DIR"
+eject -r "$DRIVE"

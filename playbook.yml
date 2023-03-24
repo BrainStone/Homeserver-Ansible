@@ -25,3 +25,4 @@
     - { name: home_assistant, tags: [ home_assistant, nginx ] }
     - { name: telegraf, tags: telegraf }
     - { name: rsyslog_via_telegraf, tags: [ rsyslog, telegraf ] }
+    - { name: fileshare, tags: [ fileshare, samba ] }
