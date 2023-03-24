@@ -13,10 +13,10 @@ fi
 ISO_DIR="{{ fileshare_path }}/ISOs"
 
 # Close the tray
-eject -rt "$DRIVE" || exit
+eject -rt "$DRIVE" || exit $?
 
 # Get the volume label, size, and block size of the CD/DVD
-ISOINFO="$(isoinfo -d -i "$DRIVE")"
+ISOINFO="$(isoinfo -d -i "$DRIVE")" || exit $?
 LABEL="$(echo "$ISOINFO" | grep "Volume id:" | awk -F ": " '{print $2}')"
 NUMBLOCKS="$(echo "$ISOINFO" | grep -i "volume size" | awk '{print $NF}')"
 BLOCKSIZE="$(echo "$ISOINFO" | grep "Logical block size" | awk '{print $NF}')"
@@ -35,6 +35,8 @@ while true; do
 	i="$((i + 1))"
 done
 
+TMP_FILENAME="${FILENAME%/*}/.${FILENAME##*/}.tmp"
+
 # Calculate the size in bytes
 SIZE="$((NUMBLOCKS * BLOCKSIZE))"
 
@@ -49,7 +51,8 @@ EOF
 
 # Write the data to the ISO file and then eject the CD/DVD drive
 mkdir -p "$ISO_DIR"
-truncate -s "$SIZE" "$FILENAME" &&
-	pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" status=none
+truncate -s "$SIZE" "$TMP_FILENAME" &&
+	pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none &&
+	mv "$TMP_FILENAME" "$FILENAME"
 chown -R nobody:nogroup "$ISO_DIR"
 eject -r "$DRIVE"
