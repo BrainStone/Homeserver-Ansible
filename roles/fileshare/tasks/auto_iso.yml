@@ -9,7 +9,7 @@
 
 - name: Copy auto_iso.sh.j2 to /usr/local/bin/auto_iso and make it executable
   template:
-    src: templates/auto_iso.sh.j2
+    src: auto_iso.sh.j2
     dest: /usr/local/bin/auto_iso
     owner: root
     group: root

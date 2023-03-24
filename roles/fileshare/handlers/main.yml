@@ -3,3 +3,8 @@
   systemd:
     name: systemd-udevd.service
     state: restarted
+
+- name: Reload samba
+  systemd:
+    name: smbd.service
+    state: restarted

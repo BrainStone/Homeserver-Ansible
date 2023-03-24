@@ -1,1 +1,20 @@
 ---
+- name: Install samba
+  apt:
+    pkg:
+      - samba
+    update_cache: false
+
+- name: Template samba config
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+  notify:
+    - Reload samba
+
+- name: Create base folder for share
+  file:
+    path: "{{ fileshare_path }}"
+    state: directory
+    owner: nobody
+    group: nogroup
