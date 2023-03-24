@@ -2,8 +2,9 @@
 - name: Install pv and libcdio-utils
   apt:
     pkg:
-      - pv
+      - beep
       - libcdio-utils
+      - pv
     update_cache: false
 
 - name: Copy auto_iso.sh.j2 to /usr/local/bin/auto_iso and make it executable
@@ -13,3 +14,11 @@
     owner: root
     group: root
     mode: 0755
+
+- name: Add udev rule
+  copy:
+    dest: /etc/udev/rules.d/99-cd-dvd.rules
+    content: |
+      KERNEL=="sr*", ACTION=="change", ENV{ID_FS_TYPE}!="", RUN+="/usr/local/bin/auto_iso --udev '%E{DEVNAME}'"
+  notify:
+    - Reload udev

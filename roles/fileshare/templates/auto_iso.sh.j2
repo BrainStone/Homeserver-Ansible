@@ -9,6 +9,12 @@ ISO_DIR="{{ fileshare_path }}/ISOs"
 # Start of script
 
 # Parse CLI params
+if [[ "$1" == "--udev" ]]; then
+	shift
+
+	FULL_AUTO="true"
+fi
+
 DRIVE="${1:-"$DEFAULT_DRIVE"}"
 
 # Check that a CD/DVD drive was provided as the first argument
@@ -26,6 +32,7 @@ while [[ $retry_count -lt $NUM_RETRIES ]]; do
 	ISOINFO="$(isoinfo -d -i "$DRIVE")" && break
 
 	retry_count=$((retry_count + 1))
+	beep -f 220 -l 500
 	sleep 1
 done
 
@@ -54,13 +61,19 @@ while true; do
 	i="$((i + 1))"
 done
 
+# Exit if we're in full auto mode and the image already exists and beep twice
+if [[ "$FULL_AUTO" == "true" && $i -ne 0 ]]; then
+	beep -f 220 -l 500 -r 2
+	exit
+fi
+
 TMP_FILENAME="${FILENAME%/*}/.${FILENAME##*/}.tmp"
 
 # Calculate the size in bytes
 SIZE="$((NUMBLOCKS * BLOCKSIZE))"
 
 # Printing info
-cat <<EOF
+[[ "$FULL_AUTO" != "true" ]] && cat <<EOF
 Reading CD/DVD:
 - Name:      $LABEL
 - Size:      $(numfmt --to=iec-i --format="%.2fB" "$SIZE")
@@ -74,11 +87,16 @@ mkdir -p "$ISO_DIR"
 retry_count=0
 while [[ $retry_count -lt $NUM_RETRIES ]]; do
 	truncate -s "$SIZE" "$TMP_FILENAME" &&
-		pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none &&
+		if [[ "$FULL_AUTO" == "true" ]]; then
+			dd if="$DRIVE" of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none
+		else
+			pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none
+		fi &&
 		mv -f "$TMP_FILENAME" "$FILENAME" &&
 		break
 
 	retry_count=$((retry_count + 1))
+	beep -f 220 -l 500
 	sleep 1
 done
 
