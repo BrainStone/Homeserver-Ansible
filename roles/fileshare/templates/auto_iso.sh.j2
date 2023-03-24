@@ -1,7 +1,15 @@
 #! /bin/bash
 # {{ ansible_managed }}
 
-DRIVE="${1:-/dev/dvd}"
+# Settings
+NUM_RETRIES=3
+DEFAULT_DRIVE=/dev/dvd
+ISO_DIR="{{ fileshare_path }}/ISOs"
+
+# Start of script
+
+# Parse CLI params
+DRIVE="${1:-"$DEFAULT_DRIVE"}"
 
 # Check that a CD/DVD drive was provided as the first argument
 if [[ ! -b "$DRIVE" ]]; then
@@ -9,14 +17,25 @@ if [[ ! -b "$DRIVE" ]]; then
 	exit 1
 fi
 
-# Base path for the isos
-ISO_DIR="{{ fileshare_path }}/ISOs"
-
 # Close the tray
 eject -rt "$DRIVE" || exit $?
 
 # Get the volume label, size, and block size of the CD/DVD
-ISOINFO="$(isoinfo -d -i "$DRIVE")" || exit $?
+retry_count=0
+while [[ $retry_count -lt $NUM_RETRIES ]]; do
+	ISOINFO="$(isoinfo -d -i "$DRIVE")" && break
+
+	retry_count=$((retry_count + 1))
+	sleep 1
+done
+
+if [[ $retry_count -ge $NUM_RETRIES ]]; then
+	eject -r "$DRIVE"
+
+	echo "Error: Failed to get ISO info after $NUM_RETRIES attempts"
+	exit 1
+fi
+
 LABEL="$(echo "$ISOINFO" | grep "Volume id:" | awk -F ": " '{print $2}')"
 NUMBLOCKS="$(echo "$ISOINFO" | grep -i "volume size" | awk '{print $NF}')"
 BLOCKSIZE="$(echo "$ISOINFO" | grep "Logical block size" | awk '{print $NF}')"
@@ -51,8 +70,22 @@ EOF
 
 # Write the data to the ISO file and then eject the CD/DVD drive
 mkdir -p "$ISO_DIR"
-truncate -s "$SIZE" "$TMP_FILENAME" &&
-	pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none &&
-	mv "$TMP_FILENAME" "$FILENAME"
+
+retry_count=0
+while [[ $retry_count -lt $NUM_RETRIES ]]; do
+	truncate -s "$SIZE" "$TMP_FILENAME" &&
+		pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none &&
+		mv -f "$TMP_FILENAME" "$FILENAME" &&
+		break
+
+	retry_count=$((retry_count + 1))
+	sleep 1
+done
+
 chown -R nobody:nogroup "$ISO_DIR"
 eject -r "$DRIVE"
+
+if [[ $retry_count -ge $NUM_RETRIES ]]; then
+	echo "Error: Failed to read disk after $NUM_RETRIES attempts"
+	exit 1
+fi
