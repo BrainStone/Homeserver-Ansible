@@ -1,5 +1,5 @@
 ---
-- name: Install pv and libcdio-utils
+- name: Install beep, libcdio-utils and pv
   apt:
     pkg:
       - beep
