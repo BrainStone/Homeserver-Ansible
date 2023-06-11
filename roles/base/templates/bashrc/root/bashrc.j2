@@ -1,5 +1,4 @@
 # {{ ansible_managed }}
-# ~/.bashrc: executed by bash(1) for non-login shells.
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -7,14 +6,14 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
 	export LS_OPTIONS='--color=auto'
-	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	[ -r ~/.dircolors ] && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 	alias ls='ls --color=auto'
 	alias dir='dir --color=auto'
 	alias vdir='vdir --color=auto'
@@ -53,7 +52,15 @@ if ! shopt -oq posix; then
 fi
 
 # Custom aliases
-alias update='~/scripts/update.sh'
+for script in ~/scripts/*.sh; do
+	# Extract the filename of the script, the remove the .sh file extension and finally replace spaces with underscores to
+	# get a nice alias name
+	script_name="$(basename "$script")"
+	alias_name="${script_name%.sh}"
+	alias_name="${alias_name// /_}"
+
+	alias "${alias_name}=$script"
+done
 
 alias password='pwgen -cnys 128 10'
 alias password_simple='pwgen -cns 32 20'
