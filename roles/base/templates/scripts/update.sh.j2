@@ -2,20 +2,27 @@
 # {{ ansible_managed }}
 
 # Force to run with bash
-if [ -z "$BASH" ];then bash $0 "$@";exit;fi
+[ -z "$BASH" ] && { bash "$0" "$@"; exit; }
 
-echo -en "\a"
-figlet -t -f smslant -k "        apt  update"
-apt update
+function print_exec() {
+	local command_str arg
 
-echo -en "\a"
-figlet -t -f smslant -k "        apt  dist-upgrade"
-apt dist-upgrade
+	command_str=""
 
-echo -en "\a"
-figlet -t -f smslant -k "        apt  autoremove"
-apt autoremove
+	for arg in "$@"; do
+		if [[ "$(printf %q "$arg")" == "$arg" ]]; then
+			command_str+=" $arg"
+		else
+			command_str+=" ${arg@Q}"
+		fi
+	done
 
-echo -en "\a"
-figlet -t -f smslant -k "        apt  autoclean"
-apt autoclean
+	echo -en "\a"
+	figlet -t -f smslant -k "      ${command_str// /  }"
+	"$@"
+}
+
+print_exec apt update
+print_exec apt dist-upgrade
+print_exec apt autoremove
+print_exec apt autoclean
