@@ -6,7 +6,5 @@
 
 source "$(dirname "$0")/print_exec.sh"
 
-print_exec apt update
-print_exec apt dist-upgrade
-print_exec apt autoremove
-print_exec apt autoclean
+print_exec pihole -up
+print_exec pihole -g

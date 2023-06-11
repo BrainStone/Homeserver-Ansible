@@ -1,0 +1,20 @@
+#! /bin/bash
+# {{ ansible_managed }}
+
+function print_exec() {
+	local command_str arg
+
+	command_str=""
+
+	for arg in "$@"; do
+		if [[ "$(printf %q "$arg")" == "$arg" ]]; then
+			command_str+=" $arg"
+		else
+			command_str+=" ${arg@Q}"
+		fi
+	done
+
+	echo -en "\a"
+	figlet -t -f smslant -k "      ${command_str// /  }"
+	"$@"
+}
