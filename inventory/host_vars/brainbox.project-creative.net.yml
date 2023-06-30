@@ -66,6 +66,7 @@ nginx_reverse_proxies:
   cockpit.brainbox.project-creative.net:
     host: "10.69.42.99"
     port: "9090"
+    secure: true
 
 vouch_homeassistant_url: "https://home-assistant.brainbox.project-creative.net"
 
