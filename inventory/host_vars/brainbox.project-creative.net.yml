@@ -64,6 +64,7 @@ nginx_reverse_proxies:
     host: "{{ hassio_ip }}"
     port: "8123"
   cockpit.brainbox.project-creative.net:
+    proto: https
     host: "10.69.42.99"
     port: "9090"
     secure: true

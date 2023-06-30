@@ -39,7 +39,7 @@ server {
 	error_log /var/log/nginx/{{ item.key }}.error.log error;
 
 	location / {
-		proxy_pass                         http://{{ item.value.host }}:{{ item.value.port }}/;
+		proxy_pass                         {{ item.value.proto | default('http') }}://{{ item.value.host }}:{{ item.value.port }}/;
 
 		proxy_set_header Host              $host;
 		proxy_set_header X-Real-IP         $remote_addr;
