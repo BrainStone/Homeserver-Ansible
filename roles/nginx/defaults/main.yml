@@ -20,11 +20,19 @@ vouch_user: 'vouch-proxy'
 # Automatically detect all local networks
 vouch_local_networks: >
   {{
-    ansible_facts | dict2items |
-    selectattr('value.active', 'true') |
-    selectattr('value.ipv4', 'defined') |
-    json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
-    map('ansible.utils.ipaddr', 'network/prefix')
+    (
+      ansible_facts | dict2items |
+      selectattr('value.active', 'true') |
+      selectattr('value.ipv4', 'defined') |
+      json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
+      map('ansible.utils.ipaddr', 'network/prefix')
+      + 
+      ansible_facts | dict2items |
+      selectattr('value.active', 'true') |
+      selectattr('value.ipv6', 'defined') |
+      json_query('[].value.ipv6[].[address, prefix][*].join(`/`, @)') |
+      map('ansible.utils.ipaddr', 'network/prefix')
+    ) | unique
   }}
 
 # vouch-proxy nextcloud peer
