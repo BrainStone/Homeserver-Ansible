@@ -1,3 +1,10 @@
+- name: Remove CNAMEs from pihole controlled config
+  lineinfile:
+    path: /etc/dnsmasq.d/05-pihole-custom-cname.conf
+    state: absent
+    search_string: "cname={{ item }},"
+  loop: "{{ nginx_vhost_names }}"
+
 - name: Set CNAMEs for internal vhosts
   template:
     src: cnames/dnsmasq.conf.j2
