@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+# This file contains all internal vhosts which are mapped to this server.
+# We need to create these CNAMEs so that internal traffic reaches these vhosts internally as well, as for the real
+# domain *.{{ nginx_base_name }} is a CNAME to {{ nginx_base_name }}.
+{% for vhost in nginx_vhost_names | sort %}
+{% if vhost.endswith('.' + nginx_base_name) %}
+cname={{ vhost }},{{ nginx_base_name }}
+{% endif %}
+{% endfor %}

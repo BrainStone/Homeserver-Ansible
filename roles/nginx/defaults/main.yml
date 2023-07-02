@@ -6,6 +6,8 @@ php_versions:
 php_extra_packages: [ ]
 
 # nginx pages
+nginx_base_name: "localhost"
+
 nginx_php_sites: { }
 
 nginx_reverse_proxies: { }

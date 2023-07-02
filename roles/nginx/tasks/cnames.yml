@@ -1,0 +1,5 @@
+- name: Set CNAMEs for internal vhosts
+  template:
+    src: cnames/dnsmasq.conf.j2
+    dest: /etc/dnsmasq.d/20-internal-vhosts-cnames.conf
+

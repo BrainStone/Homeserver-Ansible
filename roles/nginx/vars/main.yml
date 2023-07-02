@@ -1,0 +1,12 @@
+nginx_reverse_proxies_plus_vouch: >
+  {{
+    (
+      (nginx_reverse_proxies | dict2items) +
+      [{'key': vouch_host_name, 'value': {'host': '127.0.0.1', 'port': vouch_port}}]
+    ) | items2dict
+  }}
+nginx_vhost_names: >
+  {{
+    nginx_reverse_proxies_plus_vouch.keys() | list +
+    nginx_php_sites.keys() | list
+  }}

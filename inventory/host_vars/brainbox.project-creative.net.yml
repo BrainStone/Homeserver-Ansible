@@ -47,6 +47,8 @@ php_versions:
   - 8.1
   - "{{ heimdall_php_version }}"
 
+nginx_base_name: brainbox.project-creative.net
+
 nginx_php_sites:
   brainbox.project-creative.net:
     root: "{{ heimdall_base_dir }}/public"
