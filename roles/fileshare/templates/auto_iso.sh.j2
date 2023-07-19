@@ -74,7 +74,7 @@ TMP_FILENAME="${FILENAME%/*}/.${FILENAME##*/}.tmp"
 SIZE="$((NUMBLOCKS * BLOCKSIZE))"
 
 # Printing info
-[[ "$FULL_AUTO" != "true" ]] && cat <<EOF
+cat <<EOF
 Reading CD/DVD:
 - Name:      $LABEL
 - Size:      $(numfmt --to=iec-i --format="%.2fB" "$SIZE")
