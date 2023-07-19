@@ -27,10 +27,10 @@ fi
 # Close the tray
 eject -rt "$DRIVE" || exit $?
 
-# Get the volume label, size, and block size of the CD/DVD
+# Get the volume label, and block size of the CD/DVD
 retry_count=0
 while [[ $retry_count -lt $NUM_RETRIES ]]; do
-	ISOINFO="$(isoinfo -d -i "$DRIVE")" && break
+	BLKID="$(blkid -o export -s LABEL -s BLOCK_SIZE "$DRIVE")" && break
 
 	retry_count=$((retry_count + 1))
 	beep -f 220 -l 500
@@ -44,9 +44,10 @@ if [[ $retry_count -ge $NUM_RETRIES ]]; then
 	exit 1
 fi
 
-LABEL="$(echo "$ISOINFO" | grep "Volume id:" | awk -F ": " '{print $2}')"
-NUMBLOCKS="$(echo "$ISOINFO" | grep -i "volume size" | awk '{print $NF}')"
-BLOCKSIZE="$(echo "$ISOINFO" | grep "Logical block size" | awk '{print $NF}')"
+eval "$BLKID"
+SIZE="$(blockdev --getsize64 "$DRIVE")"
+# Calculate block size by rounding up (x + y - 1) / y is rounded up division in int space
+NUM_BLOCKS="$(((SIZE + BLOCK_SIZE - 1) / BLOCK_SIZE))"
 
 # Create the output filename based on the volume label
 i=0
@@ -70,9 +71,6 @@ fi
 
 TMP_FILENAME="${FILENAME%/*}/.${FILENAME##*/}.tmp"
 
-# Calculate the size in bytes
-SIZE="$((NUMBLOCKS * BLOCKSIZE))"
-
 # Printing info
 cat <<EOF
 Reading CD/DVD:
@@ -89,9 +87,9 @@ retry_count=0
 while [[ $retry_count -lt $NUM_RETRIES ]]; do
 	truncate -s "$SIZE" "$TMP_FILENAME" &&
 		if [[ "$FULL_AUTO" == "true" ]]; then
-			dd if="$DRIVE" of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none
+			dd if="$DRIVE" of="$TMP_FILENAME" bs="$BLOCK_SIZE" count="$NUM_BLOCKS" conv=notrunc status=none
 		else
-			pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCKSIZE" count="$NUMBLOCKS" conv=notrunc status=none
+			pv -tpreb -s "$SIZE" "$DRIVE" | dd of="$TMP_FILENAME" bs="$BLOCK_SIZE" count="$NUM_BLOCKS" conv=notrunc status=none
 		fi &&
 		mv -f "$TMP_FILENAME" "$FILENAME" &&
 		break
