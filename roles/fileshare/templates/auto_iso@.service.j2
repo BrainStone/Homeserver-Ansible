@@ -1,8 +1,8 @@
 # {{ ansible_managed }}
 
 [Unit]
-Description=Auto ISO Service (%I)
+Description=Auto ISO Service (%f)
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/auto_iso --udev '%I'
+ExecStart=/usr/local/bin/auto_iso --udev '%f'
