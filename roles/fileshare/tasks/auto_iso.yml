@@ -15,10 +15,16 @@
     group: root
     mode: 0755
 
+- name: Template auto_iso systemd file
+  template:
+    src: auto_iso@.service.j2
+    dest: /etc/systemd/system/auto_iso@.service
+  notify: Reload systemd
+
 - name: Add udev rule
   copy:
     dest: /etc/udev/rules.d/99-cd-dvd.rules
     content: |
-      KERNEL=="sr*", ACTION=="change", ENV{ID_FS_TYPE}!="", RUN+="/usr/local/bin/auto_iso --udev '%E{DEVNAME}'"
+      KERNEL=="sr*", ACTION=="change", ENV{ID_FS_TYPE}!="", TAG+="systemd", PROGRAM="/bin/systemd-escape -p %E{DEVNAME}", ENV{SYSTEMD_WANTS}="auto_iso@%c.service"
   notify:
     - Reload udev
