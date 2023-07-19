@@ -65,6 +65,7 @@ done
 
 # Exit if we're in full auto mode and the image already exists and beep twice
 if [[ "$FULL_AUTO" == "true" && $i -ne 0 ]]; then
+	echo "Warning: $LABEL already has been copied. Aborting"
 	beep -f 220 -l 500 -r 2
 	exit
 fi
