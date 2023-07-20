@@ -1,6 +1,9 @@
 #! /bin/bash
 # {{ ansible_managed }}
 
+# Pipes need to fail
+set -o pipefail
+
 # Settings
 NUM_RETRIES=3
 DEFAULT_DRIVE=/dev/dvd
