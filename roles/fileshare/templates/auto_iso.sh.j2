@@ -103,11 +103,34 @@ while [[ $retry_count -lt $NUM_RETRIES ]]; do
 	sleep 1
 done
 
+if [[ $retry_count -ge $NUM_RETRIES ]]; then
+	echo "Warning: Failed to read disk after $NUM_RETRIES attempts - using ddrescue"
+	beep -f 500 -l 150 -n -f 500 -l 150 -D 500 -n -f 300 -l 800
+
+	# First pass
+	ddrescue "$DRIVE" "$TMP_FILENAME" /tmp/ddr.log
+
+	# Second raw pass
+	modprobe raw
+	raw /dev/raw/raw1 /dev/dvd
+	ddrescue --retry-passes=$NUM_RETRIES --complete-only /dev/raw/raw1 "$TMP_FILENAME" /tmp/ddr.log
+	ddrescue_failed=$?
+
+	# Cleanup
+	rm /tmp/ddr.log
+	raw /dev/raw/raw1 0 0
+
+	[[ $ddrescue_failed -eq 0 ]] && mv -f "$TMP_FILENAME" "$FILENAME"
+else
+	ddrescue_failed=0
+fi
+
 chown -R nobody:nogroup "$ISO_DIR"
 eject -r "$DRIVE"
 
-if [[ $retry_count -ge $NUM_RETRIES ]]; then
-	echo "Error: Failed to read disk after $NUM_RETRIES attempts"
+# Exit on error
+if [[ $ddrescue_failed -ne 0 ]]; then
+	echo "Error: Failed to read disk with ddrescue after $NUM_RETRIES attempts!"
 	exit 1
 fi
 

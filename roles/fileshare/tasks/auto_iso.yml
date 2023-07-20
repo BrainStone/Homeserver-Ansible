@@ -3,6 +3,7 @@
   apt:
     pkg:
       - beep
+      - gddrescue
       - libcdio-utils
       - pv
     update_cache: false
