@@ -109,17 +109,18 @@ if [[ $retry_count -ge $NUM_RETRIES ]]; then
 	beep -f 500 -l 150 -n -f 500 -l 150 -D 500 -n -f 300 -l 800
 
 	# First pass
-	ddrescue --sector-size="$BLOCK_SIZE" "$DRIVE" "$TMP_FILENAME" /tmp/ddr.log
+	ddrescue --sector-size="$BLOCK_SIZE" --no-scrape "$DRIVE" "$TMP_FILENAME" /tmp/ddr.log
 
-	# Second raw pass
-	modprobe raw
-	raw /dev/raw/raw1 /dev/dvd
-	ddrescue --sector-size="$BLOCK_SIZE" --retry-passes="$NUM_RETRIES" --complete-only /dev/raw/raw1 "$TMP_FILENAME" /tmp/ddr.log
+	# Second pass using direct IO
+	ddrescue --sector-size="$BLOCK_SIZE" --retry-passes="$NUM_RETRIES" --idirect --complete-only "$DRIVE" "$TMP_FILENAME" /tmp/ddr.log
 	ddrescue_failed=$?
+
+	# Third pass using direct IO and reading in reverse
+	ddrescue --sector-size="$BLOCK_SIZE" --retry-passes="$NUM_RETRIES" --idirect --reverse --complete-only "$DRIVE" "$TMP_FILENAME" /tmp/ddr.log
+	ddrescue_failed=$((ddrescue_failed + $?))
 
 	# Cleanup
 	rm /tmp/ddr.log
-	raw /dev/raw/raw1 0 0
 
 	[[ $ddrescue_failed -eq 0 ]] && mv -f "$TMP_FILENAME" "$FILENAME"
 else
