@@ -1,4 +1,5 @@
 variables:
+  GIT_SUBMODULE_STRATEGY: recursive
   ANSIBLE_FORCE_COLOR: "true"
   ANSIBLE_HOST_KEY_CHECKING: "false"
 
