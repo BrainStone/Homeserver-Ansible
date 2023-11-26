@@ -19,6 +19,7 @@ ExecStart={{ borg_binary_location }} create -v --stats \
 	"{{ borg_repository }}::backup-{now:%%Y-%%m-%%d_%%H:%%M:%%S}" /
 {% set cleanup_directive = 'ExecStopPost' if borg_always_cleanup else 'ExecStartPost' %}
 {{ cleanup_directive }}={{ borg_binary_location }} prune -v --list --stats \
+  --glob-archives "backup-*" \
 	"--keep-within={{ borg_prune_keep_within }}" \
 	"--keep-daily={{ borg_prune_keep_daily }}" \
 	"--keep-weekly={{ borg_prune_keep_weekly }}" \
