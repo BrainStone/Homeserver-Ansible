@@ -15,6 +15,9 @@ backend  = {{ fail2ban_raw_backend }}
 maxretry = 6
 findtime = 600
 bantime  = 600
+{% if fail2ban_local_networks | length > 0 %}
+ignoreip = {{ fail2ban_local_networks | join(' ') }}
+{% endif %}
 
 [{{ fail2ban_jail_name }}-week]
 enabled  = true
@@ -31,6 +34,9 @@ backend  = {{ fail2ban_raw_backend }}
 maxretry = 12
 findtime = 86400
 bantime  = 86400
+{% if fail2ban_local_networks | length > 0 %}
+ignoreip = {{ fail2ban_local_networks | join(' ') }}
+{% endif %}
 
 [{{ fail2ban_jail_name }}-month]
 enabled  = true
@@ -47,3 +53,6 @@ backend  = {{ fail2ban_raw_backend }}
 maxretry = 24
 findtime = 2592000
 bantime  = 2592000
+{% if fail2ban_local_networks | length > 0 %}
+ignoreip = {{ fail2ban_local_networks | join(' ') }}
+{% endif %}

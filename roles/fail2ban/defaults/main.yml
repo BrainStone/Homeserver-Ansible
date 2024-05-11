@@ -1,0 +1,16 @@
+fail2ban_local_networks: >
+  {{
+    (
+      ansible_facts | dict2items |
+      selectattr('value.active', 'true') |
+      selectattr('value.ipv4', 'defined') |
+      json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
+      map('ansible.utils.ipaddr', 'network/prefix')
+      + 
+      ansible_facts | dict2items |
+      selectattr('value.active', 'true') |
+      selectattr('value.ipv6', 'defined') |
+      json_query('[].value.ipv6[].[address, prefix][*].join(`/`, @)') |
+      map('ansible.utils.ipaddr', 'network/prefix')
+    ) | unique
+  }}
