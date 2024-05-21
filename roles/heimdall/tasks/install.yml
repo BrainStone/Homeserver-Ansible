@@ -9,6 +9,13 @@
     depth: 1
     single_branch: true
 
+- name: Install Composer dependencies
+  shell: |
+    php{{ heimdall_php_version }} "$(which composer)" install --optimize-autoloader
+  args:
+    chdir: "{{ heimdall_base_dir }}"
+
+
 - name: Generates key
   shell: |
     cp .env.template .env

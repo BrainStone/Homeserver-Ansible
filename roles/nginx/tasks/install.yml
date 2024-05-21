@@ -27,6 +27,11 @@
       }}
     state: present
 
+- name: Install Composer
+  include_role:
+    name: geerlingguy.composer
+  when: not ansible_check_mode
+
 - name: Remove default config
   file:
     path: /etc/nginx/sites-enabled/default
