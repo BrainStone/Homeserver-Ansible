@@ -8,4 +8,4 @@ roles:
   - src: brainstone.wireguard_easy
   - src: r_pufky.pihole
   - src: dj-wasabi.telegraf
-  - src: geerlingguy.nodejs
+  - src: geerlingguy.composer
