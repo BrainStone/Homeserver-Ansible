@@ -40,11 +40,11 @@ php_extra_packages:
   - zip
 
 # Setting these defaults manually because they are used in other variables
-heimdall_php_version: 8.0
+heimdall_php_version: '8.2'
 heimdall_base_dir: /var/www/heimdall
 
 php_versions:
-  - 8.1
+  - '8.1'
   - "{{ heimdall_php_version }}"
 
 nginx_base_name: brainbox.project-creative.net

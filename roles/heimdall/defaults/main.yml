@@ -1,4 +1,4 @@
 ---
 heimdall_user: www-data
-heimdall_php_version: 8.0
+heimdall_php_version: '8.2'
 heimdall_base_dir: /var/www/heimdall
