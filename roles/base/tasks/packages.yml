@@ -29,7 +29,7 @@
 - name: Roberto Mier Escandon's Repo
   apt_repository:
     repo: "ppa:rmescandon/yq"
-    codename: focal
+    codename: jammy
     update_cache: false
     filename: rmescandon-yq
   check_mode: false

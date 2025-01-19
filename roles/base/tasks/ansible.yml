@@ -1,6 +1,6 @@
 - name: Add Ansible Repo
   apt_repository:
-    repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu focal main
+    repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu jammy main
     update_cache: false
     filename: ansible
     state: present
