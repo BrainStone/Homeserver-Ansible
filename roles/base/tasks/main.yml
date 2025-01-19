@@ -7,3 +7,5 @@
 - include_tasks: scripts.yml
 
 - include_tasks: bashrc.yml
+
+- include_tasks: sshd.yml

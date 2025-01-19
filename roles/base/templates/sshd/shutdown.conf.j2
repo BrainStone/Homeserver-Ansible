@@ -1,0 +1,9 @@
+[Unit]
+# Clear the list (remove default shutdown.target from it)
+#Conflicts=
+DefaultDependencies=no
+
+[Install]
+# Ensure service keeps running during shutdown as long as possible and additionally spawns during emergency and rescue
+# mode, so we can fix it remotely. Root login is allowed anyways
+WantedBy=shutdown.target emergency.target rescue.target

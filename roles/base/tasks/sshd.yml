@@ -1,0 +1,12 @@
+- name: Ensure ssh.service drop-in config dir exists
+  file:
+    path: /etc/systemd/system/ssh.service.d
+    state: directory
+
+- name: Copy ssh.service runtime extension
+  template:
+    src: sshd/shutdown.conf.j2
+    dest: /etc/systemd/system/ssh.service.d/shutdown.conf
+  notify:
+    - Reload systemd
+    - Enable sshd
