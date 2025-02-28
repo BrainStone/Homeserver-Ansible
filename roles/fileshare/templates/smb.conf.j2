@@ -55,23 +55,17 @@
 # new domain.
    server role = standalone server
 
-   obey pam restrictions = yes
+	 obey pam restrictions = no  # Disabled to ensure guest access is not restricted by PAM
 
 # This boolean parameter controls whether Samba attempts to sync the Unix
 # password with the SMB password when the encrypted SMB password in the
 # passdb is changed.
-   unix password sync = yes
-
-# For Unix password sync to work on a Debian GNU/Linux system, the following
-# parameters must be set (thanks to Ian Kahan <<kahan@informatik.tu-muenchen.de> for
-# sending the correct chat script for the passwd program in Debian Sarge).
-   passwd program = /usr/bin/passwd %u
-   passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+   unix password sync = no  # Disabled as password sync is unnecessary for guest access
 
 # This boolean controls whether PAM will be used for password changes
 # when requested by an SMB client instead of the program listed in
 # 'passwd program'. The default is 'no'.
-   pam password change = yes
+   pam password change = no  # Disabled since we don't require password changes
 
 # This option controls how unsuccessful authentication attempts are mapped
 # to anonymous connections
