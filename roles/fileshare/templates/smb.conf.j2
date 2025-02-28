@@ -55,17 +55,20 @@
 # new domain.
    server role = standalone server
 
-	 obey pam restrictions = no  # Disabled to ensure guest access is not restricted by PAM
+# Disabled to ensure guest access is not restricted by PAM
+	 obey pam restrictions = no
 
 # This boolean parameter controls whether Samba attempts to sync the Unix
 # password with the SMB password when the encrypted SMB password in the
 # passdb is changed.
-   unix password sync = no  # Disabled as password sync is unnecessary for guest access
+# Disabled as password sync is unnecessary for guest access
+   unix password sync = no
 
 # This boolean controls whether PAM will be used for password changes
 # when requested by an SMB client instead of the program listed in
 # 'passwd program'. The default is 'no'.
-   pam password change = no  # Disabled since we don't require password changes
+# Disabled since we don't require password changes
+   pam password change = no
 
 # This option controls how unsuccessful authentication attempts are mapped
 # to anonymous connections
