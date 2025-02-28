@@ -53,10 +53,7 @@ nginx_php_sites:
   brainbox.project-creative.net:
     root: "{{ heimdall_base_dir }}/public"
     php_version: "{{ heimdall_php_version }}"
-  pihole.brainbox.project-creative.net:
-    root: /var/www/html
-    secure: true
-
+  
 nginx_reverse_proxies:
   vpn.brainbox.project-creative.net:
     host: "{{ wireguard_easy_listen_ip }}"
@@ -69,6 +66,10 @@ nginx_reverse_proxies:
     proto: https
     host: "10.69.42.99"
     port: "9090"
+    secure: true
+  pihole.brainbox.project-creative.net:
+    host: "{{ pihole_ftl_listen_host }}"
+    port: "{{ pihole_ftl_listen_port }}"
     secure: true
 
 vouch_homeassistant_url: "https://home-assistant.brainbox.project-creative.net"

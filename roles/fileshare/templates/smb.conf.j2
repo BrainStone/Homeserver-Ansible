@@ -76,6 +76,8 @@
 # This option controls how unsuccessful authentication attempts are mapped
 # to anonymous connections
    map to guest = bad user
+   
+   guest account = nobody
 
 ########## Domains ###########
 
@@ -153,6 +155,7 @@
    public = yes
    guest only = yes
    writable = yes
+   force user = nobody
    force create mode = 0666
    force directory mode = 0777
    browseable = yes

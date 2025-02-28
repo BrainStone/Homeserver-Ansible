@@ -20,6 +20,9 @@ pihole_dhcp_ipv6: true
 pihole_pihole_dns_1: "1.1.1.1#53"
 pihole_pihole_dns_2: "1.0.0.1#53"
 pihole_dnsmasq_listening: "local"
+pihole_ftl_listen_host: "127.0.0.1"
+pihole_ftl_listen_port: "8080"
+pihole_ftl_port: "{{ pihole_ftl_listen_host }}:{{ pihole_ftl_listen_port }}o"
 
 # Whitelisting (type: 0) and blacklisting (type: 1) domains
 pihole_domain_blocklists:

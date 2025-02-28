@@ -20,8 +20,8 @@
     # Software stuff
     - { name: heimdall, tags: [ heimdall, nginx ] }
     - { name: gitlab_runner, tags: gitlab_runner, when: gitlab_runner_token is defined }
-    - { name: r_pufky.pihole, tags: [ pihole, nginx ] }
-    - { name: brainstone.wireguard_easy, tags: [ wireguard_easy, wireguard, nginx ] }
+#    - { name: r_pufky.pihole, tags: [ pihole, nginx ] }
+#    - { name: brainstone.wireguard_easy, tags: [ wireguard_easy, wireguard, nginx ] }
     - { name: home_assistant, tags: [ home_assistant, nginx ] }
     - { name: telegraf, tags: telegraf }
     - { name: rsyslog_via_telegraf, tags: [ rsyslog, telegraf ] }
