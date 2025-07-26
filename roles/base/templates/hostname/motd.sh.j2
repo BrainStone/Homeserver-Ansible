@@ -22,14 +22,14 @@ echo
 echo "IPv4:"
 
 echo "  * $(curl -4sSL http://ifconfig.me)"
-{% for ip in ansible_all_ipv4_addresses | ipaddr('int') | sort | ipaddr %}
+{% for ip in ansible_all_ipv4_addresses | ansible.utils.ipaddr('int') | sort | ansible.utils.ipaddr %}
 echo "  * {{ ip }}"
 {% endfor %}
 
 echo
 echo "IPv6:"
 
-{% for ip in ansible_all_ipv6_addresses | ipaddr('public') | ipaddr('int') | sort | ipaddr %}
+{% for ip in ansible_all_ipv6_addresses | ansible.utils.ipaddr('public') | ansible.utils.ipaddr('int') | sort | ansible.utils.ipaddr %}
 echo "  * {{ ip }}"
 {% endfor %}
 

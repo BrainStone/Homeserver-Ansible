@@ -28,14 +28,14 @@ vouch_local_networks: >
       selectattr('value.ipv4', 'defined') |
       json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
       map('ansible.utils.ipaddr', 'network/prefix') |
-      ipaddr('int') | sort | ipaddr 
+      ansible.utils.ipaddr('int') | sort | ansible.utils.ipaddr 
       + 
       ansible_facts | dict2items |
       selectattr('value.active', 'true') |
       selectattr('value.ipv6', 'defined') |
       json_query('[].value.ipv6[].[address, prefix][*].join(`/`, @)') |
       map('ansible.utils.ipaddr', 'network/prefix') |
-      ipaddr('int') | sort | ipaddr 
+      ansible.utils.ipaddr('int') | sort | ansible.utils.ipaddr 
     ) | unique
   }}
 
