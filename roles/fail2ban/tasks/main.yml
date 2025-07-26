@@ -1,6 +1,8 @@
-- name: Install fail2ban
+- name: Install fail2ban and ipset
   apt:
-    name: fail2ban
+    pkg:
+      - fail2ban
+      - ipset
     state: present
 
 - name: remove default Jail
@@ -9,14 +11,23 @@
     state: absent
   notify: Restart fail2ban
 
+- name: fail2ban config
+  template:
+    src: "{{ item }}"
+    dest: "/etc/fail2ban/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/config/*.j2
+  notify: Restart fail2ban
+
 - name: sshd Jail
   vars:
     fail2ban_jail_name: sshd
     fail2ban_filter: sshd
     fail2ban_port: ssh
     fail2ban_logpath: sshd_log
+    fail2ban_backend: sshd_backend
   template:
-    src: fail2ban.conf.j2
+    src: template/jail.conf.j2
     dest: "/etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.conf"
   notify: Restart fail2ban
 

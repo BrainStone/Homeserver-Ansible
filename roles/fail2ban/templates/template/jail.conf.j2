@@ -6,6 +6,8 @@ filter   = {{ fail2ban_filter }}
 port     = {{ fail2ban_port }}
 {% if fail2ban_logpath is defined %}
 logpath  = %({{ fail2ban_logpath }})s
+{% elif fail2ban_raw_logpath is defined %}
+logpath  = {{ fail2ban_raw_logpath }}
 {% endif %}
 {% if fail2ban_backend is defined %}
 backend  = %({{ fail2ban_backend }})s
@@ -25,6 +27,8 @@ filter   = {{ fail2ban_filter }}
 port     = {{ fail2ban_port }}
 {% if fail2ban_logpath is defined %}
 logpath  = %({{ fail2ban_logpath }})s
+{% elif fail2ban_raw_logpath is defined %}
+logpath  = {{ fail2ban_raw_logpath }}
 {% endif %}
 {% if fail2ban_backend is defined %}
 backend  = %({{ fail2ban_backend }})s
@@ -44,6 +48,8 @@ filter   = {{ fail2ban_filter }}
 port     = {{ fail2ban_port }}
 {% if fail2ban_logpath is defined %}
 logpath  = %({{ fail2ban_logpath }})s
+{% elif fail2ban_raw_logpath is defined %}
+logpath  = {{ fail2ban_raw_logpath }}
 {% endif %}
 {% if fail2ban_backend is defined %}
 backend  = %({{ fail2ban_backend }})s
