@@ -21,7 +21,7 @@ echo "Welcome on ${BOLD}{{ inventory_hostname }}${RESET}."
 echo
 echo "IPv4:"
 
-echo "  * $(curl -sSL http://ifconfig.me)"
+echo "  * $(curl -4sSL http://ifconfig.me)"
 {% for ip in ansible_all_ipv4_addresses | ipaddr('int') | sort | ipaddr %}
 echo "  * {{ ip }}"
 {% endfor %}
@@ -29,6 +29,7 @@ echo "  * {{ ip }}"
 echo
 echo "IPv6:"
 
+echo "  * $(curl -6sSL http://ifconfig.me)"
 {% for ip in ansible_all_ipv6_addresses | ipaddr('public') | ipaddr('int') | sort | ipaddr %}
 echo "  * {{ ip }}"
 {% endfor %}
