@@ -29,7 +29,6 @@ echo "  * {{ ip }}"
 echo
 echo "IPv6:"
 
-echo "  * $(curl -6sSL http://ifconfig.me)"
 {% for ip in ansible_all_ipv6_addresses | ipaddr('public') | ipaddr('int') | sort | ipaddr %}
 echo "  * {{ ip }}"
 {% endfor %}
