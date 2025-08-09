@@ -21,7 +21,7 @@ bantime  = 600
 ignoreip = {{ fail2ban_local_networks | join(' ') }}
 {% endif %}
 
-[{{ fail2ban_jail_name }}-week]
+[{{ fail2ban_jail_name }}-day]
 enabled  = true
 filter   = {{ fail2ban_filter }}
 port     = {{ fail2ban_port }}
