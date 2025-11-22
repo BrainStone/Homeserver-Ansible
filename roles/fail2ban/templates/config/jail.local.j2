@@ -2,8 +2,8 @@
 [DEFAULT]
 
 # Use ipset to make iptables handle them much much more efficiently
-banaction           = iptables-ipset[type=multiport]
-banaction_allports  = iptables-ipset[type=allports]
+banaction           = iptables-ipset[type=multiport, ipsettype=hash:net]
+banaction_allports  = iptables-ipset[type=allports, ipsettype=hash:net]
 {% if fail2ban_banlist_de_api_key is defined %}
 
 blocklist_de_apikey = {{ fail2ban_banlist_de_api_key }}
