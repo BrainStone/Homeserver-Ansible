@@ -24,6 +24,7 @@ vouch_local_networks: >
   {{
     (
       ansible_facts | dict2items |
+      selectattr('value.active', 'defined') |
       selectattr('value.active', 'true') |
       selectattr('value.ipv4', 'defined') |
       json_query('[].value.ipv4.[network, netmask].join(`/`, @)') |
@@ -31,6 +32,7 @@ vouch_local_networks: >
       ansible.utils.ipaddr('int') | sort | ansible.utils.ipaddr 
       + 
       ansible_facts | dict2items |
+      selectattr('value.active', 'defined') |
       selectattr('value.active', 'true') |
       selectattr('value.ipv6', 'defined') |
       json_query('[].value.ipv6[].[address, prefix][*].join(`/`, @)') |
