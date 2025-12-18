@@ -10,6 +10,7 @@ user_management_all_user_attrs:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH6qb4d6mytVq4W4q9X6DHU24g1UygnmF3do1oC5lkmG cb:6c:d4:c6:ab:64:91:4b:6b:e9:02:3e:c4:22:6d:c9 USB-Key BrainStone'
       - 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAlyHkM0Hqglp4VWqnIQUm9dl0M68YkErxkNr8CK87Ww6s3ZV8DNDbVaLFK++L+qJc+tSxI+5Y3r2sN6Atht9u4= BrainStone-Mobile'
       - 'sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILZDvZ5uUvCEgMfcXxK3vWZrt1C8w4kNez+iCbRFMBb0AAAAE3NzaDpZdWJpS2V5IFlhbm5pY2s= YubiKey Yannick'
+      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDPpLSY5Op0Cwass4ERZZn+b8PwcIJkzccH2xgRszuJeoALe76vcW52UCLkycAuZxI+GLc+dgk/pfU67aZ5CToyTx4MB7tQ7EBFFFLgEkyDKK/uxqWiY9h1OHwA//8gk3+oOF1HcO0M4DH+6QTEbF/bfh7t3n3JzKCGThV6h80SiJTGQDBiXiGssI9+tDCZGV28izvcG4DQhsYURuo45+Ej5yryeciPcNEvd+qvXTRvM3QX7xw/KTbS04XBoxjLaiI/wN0NgE5eRvVQiNV353yZ5aBNume1qGLy+ddCkOtYghWj0RnmRXwvqtXmKMq/0sTM2qR5lq8pEZRxEu0hcGo/JaCL9FwfsiLpzsXOp8OXoeastkZpLjNSj6jdGoyLZAZYhAnr1sppsvyV+MAhvVIu+qqdsMHxRjI3UNOpriYQS3kpaLvgNWhR4U6v2Fm/uw531Sc732nBoIF9OGqXCZAuQ7hgr33eAyA0zko/oWhyKbsPYME/O+7cnLs1rkbt3hk= ys@ts5'
   
   # Removed users
   debian:
