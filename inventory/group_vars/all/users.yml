@@ -9,6 +9,7 @@ user_management_all_user_attrs:
     ssh_keys:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH6qb4d6mytVq4W4q9X6DHU24g1UygnmF3do1oC5lkmG cb:6c:d4:c6:ab:64:91:4b:6b:e9:02:3e:c4:22:6d:c9 USB-Key BrainStone'
       - 'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAlyHkM0Hqglp4VWqnIQUm9dl0M68YkErxkNr8CK87Ww6s3ZV8DNDbVaLFK++L+qJc+tSxI+5Y3r2sN6Atht9u4= BrainStone-Mobile'
+      - 'sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILZDvZ5uUvCEgMfcXxK3vWZrt1C8w4kNez+iCbRFMBb0AAAAE3NzaDpZdWJpS2V5IFlhbm5pY2s= YubiKey Yannick'
   
   # Removed users
   debian:
