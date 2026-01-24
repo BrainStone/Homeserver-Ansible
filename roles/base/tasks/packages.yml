@@ -4,40 +4,64 @@
       - apt-transport-https
     update_cache: false
 
-- name: Add Debian Backports
-  apt_repository:
-    repo: "{{ item }} http://deb.debian.org/debian {{ ansible_distribution_release | lower }}-backports main"
-    update_cache: false
-    filename: backports
+- name: Configure Debian Sources
+  ansible.builtin.deb822_repository:
+    name: debian
+    signed_by: /usr/share/keyrings/debian-archive-keyring.gpg
+    types:
+      - deb
+      - deb-src
+    uris:
+      - mirror+file:///etc/apt/mirrors/debian.list
+    suites:
+      - "{{ ansible_distribution_release }}"
+      - "{{ ansible_distribution_release }}-updates"
+      - "{{ ansible_distribution_release }}-backports"
+    components:
+      - main
+      - contrib
+      - non-free-firmware
   check_mode: false
-  with_items:
-    - deb
-    - deb-src
+
+- name: Configure Debian Security Sources
+  ansible.builtin.deb822_repository:
+    name: debian-security
+    signed_by: /usr/share/keyrings/debian-archive-keyring.gpg
+    types:
+      - deb
+      - deb-src
+    uris:
+      - mirror+file:///etc/apt/mirrors/debian-security.list
+    suites:
+      - "{{ ansible_distribution_release }}-security"
+    components:
+      - main
+      - contrib
+      - non-free-firmware
+  check_mode: false
 
 - name: Add Azlux's repository
-  apt_repository:
-    repo: "deb https://packages.azlux.fr/debian/ {{ ansible_distribution_release | lower }} main"
-    update_cache: false
-    filename: azlux
+  ansible.builtin.deb822_repository:
+    name: azlux
+    signed_by: https://azlux.fr/repo.gpg.key
+    uris:
+      - https://packages.azlux.fr/debian/
+    suites:
+      - "{{ ansible_distribution_release | lower }}"
+    components:
+      - main
   check_mode: false
 
-- name: Add Azlux's GPG key
-  apt_key:
-    url: https://azlux.fr/repo.gpg.key
-  check_mode: false
-
-- name: Roberto Mier Escandon's Repo
-  apt_repository:
-    repo: "ppa:rmescandon/yq"
-    codename: jammy
-    update_cache: false
-    filename: rmescandon-yq
-  check_mode: false
-
-- name: Roberto Mier Escandon's Repo Key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: CC86BB64
+- name: Add Roberto Mier Escandon's repo
+  ansible.builtin.deb822_repository:
+    name: rmescandon-yq
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCC86BB64
+    uris:
+      - http://ppa.launchpad.net/rmescandon/yq/ubuntu
+    suites:
+      - jammy
+    components:
+      - main
   check_mode: false
 
 - name: Install Base Packages

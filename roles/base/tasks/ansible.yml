@@ -1,15 +1,13 @@
-- name: Add Ansible Repo
-  apt_repository:
-    repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu jammy main
-    update_cache: false
-    filename: ansible
-    state: present
-  check_mode: false
-
-- name: Add Ansible Repo Key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 93C4A3FD7BB9C367
+- name: Add Ansible Repo for Debian or Ubuntu
+  ansible.builtin.deb822_repository:
+    name: ansible
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367
+    uris:
+      - http://ppa.launchpad.net/ansible/ansible/ubuntu
+    suites:
+      - "{{ 'noble' if (ansible_distribution == 'Debian') else ansible_lsb.codename }}"
+    components:
+      - main
   check_mode: false
 
 - name: Ensure /etc/bash_completion.d exists

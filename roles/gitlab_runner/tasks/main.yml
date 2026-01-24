@@ -1,17 +1,20 @@
-- name: Add GitLab-Runner GPG key
-  apt_key:
-    url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
-  check_mode: false
-
 - name: Add GitLab-Runner APT repository
-  apt_repository:
-    repo: "{{ item }} https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} main"
-    update_cache: false
-    filename: gitlab-runner
-  check_mode: false
   with_items:
     - deb
     - deb-src
+  ansible.builtin.deb822_repository:
+    name: gitlab-runner
+    signed_by: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+    types:
+      - deb
+      - deb-src
+    uris:
+      - "https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_distribution | lower }}/"
+    suites:
+      - "{{ ansible_distribution_release }}"
+    components:
+      - main
+  check_mode: false
 
 - name: Setup APT pinning for the runner
   template:
