@@ -3,7 +3,6 @@
 # Welcome to the chrony configuration file. See chrony.conf(5) for more
 # information about usable directives.
 
-{% if not (ansible_distribution == 'Debian' and ansible_distribution_major_version == '10') %}
 # Include configuration files found in /etc/chrony/conf.d.
 confdir /etc/chrony/conf.d
 
@@ -13,7 +12,6 @@ sourcedir /run/chrony-dhcp
 # Use NTP sources found in /etc/chrony/sources.d.
 sourcedir /etc/chrony/sources.d
 
-{% endif %}
 # This directive specify the location of the file containing ID/key pairs for
 # NTP authentication.
 keyfile /etc/chrony/chrony.keys
@@ -22,11 +20,9 @@ keyfile /etc/chrony/chrony.keys
 # information.
 driftfile /var/lib/chrony/chrony.drift
 
-{% if not (ansible_distribution == 'Debian' and ansible_distribution_major_version == '10') %}
 # Save NTS keys and cookies.
 ntsdumpdir /var/lib/chrony
 
-{% endif %}
 # Uncomment the following line to turn logging on.
 #log tracking measurements statistics
 
