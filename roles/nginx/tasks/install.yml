@@ -1,13 +1,13 @@
-- name: Add SURY PPA GPG key
-  apt_key:
-    url: https://packages.sury.org/php/apt.gpg
-  check_mode: false
-
 - name: Add SURY PPA APT repository
-  apt_repository:
-    repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
-    update_cache: true
-    filename: php
+  ansible.builtin.deb822_repository:
+    name: php
+    signed_by: https://packages.sury.org/php/apt.gpg
+    uris:
+      - https://packages.sury.org/php/
+    suites:
+      - "{{ ansible_distribution_release }}"
+    components:
+      - main
   check_mode: false
 
 - name: Install nginx-full and PHP
