@@ -1,80 +1,84 @@
 <!-- {{ ansible_managed }} -->
 <domain type="kvm">
-  <name>hassio</name>
-  <uuid>fbd8898b-fc90-4dcf-97b5-3d30a0e14738</uuid>
-  <description>Home Assistant OS</description>
-  <memory unit="KiB">{{ 8 * 1024 * 1024 }}</memory>
-  <currentMemory unit="KiB">{{ 8 * 1024 * 1024 }}</currentMemory>
-  <vcpu placement="static">6</vcpu>
-  <os>
-    <type arch="x86_64" machine="pc-i440fx-5.2">hvm</type>
-    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
-		<nvram>/var/lib/libvirt/qemu/nvram/hassio_VARS.fd</nvram>
-    <boot dev="hd"/>
-  </os>
-  <features>
-    <acpi/>
-    <apic/>
-  </features>
-  <cpu mode="host-model" check="partial"/>
-  <clock offset="utc">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-  </clock>
+	<name>hassio</name>
+	<uuid>fbd8898b-fc90-4dcf-97b5-3d30a0e14738</uuid>
+	<description>Home Assistant OS</description>
+	<memory unit="KiB">{{ 8 * 1024 * 1024 }}</memory>
+	<currentMemory unit="KiB">{{ 8 * 1024 * 1024 }}</currentMemory>
+	<vcpu placement="static">6</vcpu>
+	<os firmware="efi">
+		<type arch="x86_64" machine="pc-i440fx-5.2">hvm</type>
+		<firmware>
+			<feature enabled="no" name="enrolled-keys"/>
+			<feature enabled="no" name="secure-boot"/>
+		</firmware>
+		<loader readonly="yes" type="pflash" format="raw">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
+		<nvram template="/usr/share/OVMF/OVMF_VARS_4M.fd" templateFormat="raw" format="raw">/var/lib/libvirt/qemu/nvram/hassio_VARS.fd</nvram>
+		<boot dev="hd"/>
+	</os>
+	<features>
+		<acpi/>
+		<apic/>
+	</features>
+	<cpu mode="host-model" check="partial"/>
+	<clock offset="utc">
+		<timer name="rtc" tickpolicy="catchup"/>
+		<timer name="pit" tickpolicy="delay"/>
+		<timer name="hpet" present="no"/>
+	</clock>
 	<on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>destroy</on_crash>
-  <pm>
-    <suspend-to-mem enabled="no"/>
-    <suspend-to-disk enabled="no"/>
-  </pm>
-  <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source file="{{ hassio_data }}/haos_ova.qcow2"/>
-      <target dev="sda" bus="sata"/>
+	<on_reboot>restart</on_reboot>
+	<on_crash>destroy</on_crash>
+	<pm>
+		<suspend-to-mem enabled="no"/>
+		<suspend-to-disk enabled="no"/>
+	</pm>
+	<devices>
+		<emulator>/usr/bin/qemu-system-x86_64</emulator>
+		<disk type="file" device="disk">
+			<driver name="qemu" type="qcow2"/>
+			<source file="{{ hassio_data }}/haos_ova.qcow2"/>
+			<target dev="sda" bus="sata"/>
 			<address type="drive" controller="0" bus="0" target="0" unit="0"/>
-    </disk>
-    <controller type="usb" index="0" model="ich9-ehci1">
+		</disk>
+		<controller type="usb" index="0" model="ich9-ehci1">
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x7"/>
 		</controller>
-    <controller type="usb" index="0" model="ich9-uhci1">
-      <master startport="0"/>
+		<controller type="usb" index="0" model="ich9-uhci1">
+			<master startport="0"/>
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0" multifunction="on"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci2">
-      <master startport="2"/>
+		</controller>
+		<controller type="usb" index="0" model="ich9-uhci2">
+			<master startport="2"/>
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x1"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci3">
-      <master startport="4"/>
+		</controller>
+		<controller type="usb" index="0" model="ich9-uhci3">
+			<master startport="4"/>
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x2"/>
-    </controller>
+		</controller>
 		<controller type="pci" index="0" model="pci-root"/>
 		<controller type="sata" index="0">
-    	<address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
-   	</controller>
-    <interface type="bridge">
-      <mac address="{{ hassio_mac_address }}"/>
+			<address type="pci" domain="0x0000" bus="0x00" slot="0x04" function="0x0"/>
+		</controller>
+		<interface type="bridge">
+			<mac address="{{ hassio_mac_address }}"/>
 			<source bridge="br0"/>
-      <model type="e1000"/>
+			<model type="e1000"/>
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x0"/>
-    </interface>
-    <serial type="pty">
-      <target type="isa-serial" port="0">
-        <model name="isa-serial"/>
-      </target>
-    </serial>
-    <console type="pty">
-      <target type="serial" port="0"/>
-    </console>
-    <input type="mouse" bus="ps2"/>
-    <input type="keyboard" bus="ps2"/>
-    <audio id="1" type="none"/>
-    <memballoon model="virtio">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
-    </memballoon>
-  </devices>
+		</interface>
+		<serial type="pty">
+			<target type="isa-serial" port="0">
+				<model name="isa-serial"/>
+			</target>
+		</serial>
+		<console type="pty">
+			<target type="serial" port="0"/>
+		</console>
+		<input type="mouse" bus="ps2"/>
+		<input type="keyboard" bus="ps2"/>
+		<audio id="1" type="none"/>
+		<memballoon model="virtio">
+			<address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
+		</memballoon>
+	</devices>
 </domain>
