@@ -1,0 +1,68 @@
+# Exclusion syntax:
+#
+# https://borgbackup.readthedocs.io/en/stable/usage.html#borg-help-patterns
+
+borgmatic_default_exclude:
+  # Exclude system filesystems
+
+  - /dev/
+  - /proc/
+  - /run/
+  - /sys/
+
+  # Exclude borg caches
+
+  - /root/.config/borg/
+  - /home/*/.config/borg/
+
+  # Exclude caches
+
+  - /var/cache/
+  - /var/lib/apt/lists/
+  - /var/lib/dpkg/parts/
+  - /var/lib/dpkg/info/
+  - /root/.cache/
+  - /home/*/.cache/
+  # Python caches
+  - '*/__pycache__/'
+  - '*/*.pyc'
+  - '*/*.pyo'
+  - '*/*.pyd'
+  - '/home/*/.local/lib/python*/site-packages/__pycache__/'
+  - '/usr/lib/python*/site-packages/__pycache__/'
+  - '/usr/local/lib/python*/site-packages/__pycache__/'
+  - '*/.pytest_cache/'
+  - '*/.tox/'
+  - '*/build/'
+  - '*/dist/'
+  - '*/*.egg-info/'
+
+  # Special files that would cause problems
+
+  - /usr/lib/systemd/system/alsa-utils.service
+  - /usr/lib/systemd/system/cryptdisks-early.service
+  - /usr/lib/systemd/system/cryptdisks.service
+  - /usr/lib/systemd/system/hwclock.service
+  - /usr/lib/systemd/system/pulseaudio-enable-autospawn.service
+  - /usr/lib/systemd/system/saned.service
+  - /usr/lib/systemd/system/screen-cleanup.service
+  - /usr/lib/systemd/system/sudo.service
+  - /usr/lib/systemd/system/x11-common.service
+
+  # Exclude temporary files
+
+  - /tmp/
+  - /var/tmp/
+  - /root/.ansible/tmp/
+  - /home/*/.ansible/tmp/
+
+  # Log files
+  - /var/log/
+
+  # Misc application stuff (may not even exist in the first place!)
+
+  - /backup
+  - /remote-backup
+  - /var/lib/docker/
+  - /home/gitlab-runner/builds/
+  - /home/gitlab-runner/cache/

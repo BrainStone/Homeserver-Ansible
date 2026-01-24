@@ -1,0 +1,15 @@
+- name: Template borgmatic systemd files
+  template:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/systemd/borgmatic_sync/*.j2
+
+- name: Enable and start borgmatic repository sync timer
+  systemd:
+    name: borgmatic-repo-sync.timer
+    enabled: "{{ (borgmatic_sync_remote_path | length > 0 )| ternary('yes', 'no') }}"
+    state: "{{ (borgmatic_sync_remote_path | length > 0) | ternary('started', 'stopped')  }}"
+    daemon_reload: yes
+  # In check mode the timer may not exist (yet)
+  ignore_errors: "{{ ansible_check_mode }}"

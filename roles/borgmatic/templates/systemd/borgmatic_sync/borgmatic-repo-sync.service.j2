@@ -1,0 +1,45 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Sync Borgmatic Repository to Remote Backup
+Wants=network-online.target
+After=network-online.target
+# Wait for borgmatic service if it's running, but don't start it
+After=borgmatic.service
+
+[Service]
+Type=oneshot
+# Rsync the borgmatic repository to remote backup
+ExecStart=/usr/bin/rsync -a --no-o --no-g --partial --delete --stats {{ borgmatic_repository }}/. {{ borgmatic_sync_remote_path }}
+
+# 24 = Partial transfer due to vanished source files
+SuccessExitStatus=24
+
+# Lower CPU and I/O priority
+Nice=19
+CPUSchedulingPolicy=batch
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOWeight=100
+
+# Security settings
+LockPersonality=true
+NoNewPrivileges=yes
+PrivateDevices=no
+PrivateTmp=yes
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

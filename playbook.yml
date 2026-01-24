@@ -9,6 +9,7 @@
     
     # Normal stuff
     - { name: borg, tags: borg }
+    - { name: borgmatic, tags: [ borgmatic, borg ] }
     - { name: chrony, tags: [ chrony, ntp ] }
     - { name: fail2ban, tags: [ fail2ban, security ] }
     

@@ -1,6 +1,6 @@
 bridge_physical_interface: enp1s0f0
 
-borg_password: !vault |
+borgmatic_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   61373030313834633839613238666534636438613231393466333131336538353632353861663062
   6537353536643436373962666334323965333433333839330a386439326331376137376533373234
@@ -12,9 +12,11 @@ borg_password: !vault |
   37313362623266376666306466613065653831353434626336666265623638363661653433393666
   66663562646235643632303264306261633161353831623032663238373666626461
 
-borg_paths_exclude:
-  - /data/mc02.root.los-mineros-locos.de
+borgmatic_paths_exclude:
   - /data/share/Server Backup/old_backups
+
+borgmatic_compression: zstd,15
+borgmatic_sync_remote_path: borgwarehouse@borg.project-creative.net:./1e6ecdcb/
 
 gitlab_runner_id: 3
 

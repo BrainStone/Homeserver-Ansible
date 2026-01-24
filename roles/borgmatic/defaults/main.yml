@@ -1,0 +1,37 @@
+# Sets whether borg backups are enabled or not
+borgmatic_backups_enabled: yes
+
+# Version of Borgmatic to install
+borgmatic_version: ''
+
+# List of directories to exclude
+borgmatic_paths_exclude: []
+
+# List of BTRFS mount points to create snapshots from
+borgmatic_btrfs_mountpoints: [ ]
+
+borgmatic_repository: /backup/borg
+borgmatic_compression: zstd,4
+
+# Sync target for rsync
+borgmatic_sync_remote_path: ""
+
+# Enable timer unit
+borgmatic_schedule: yes
+# Every hour (systemd timer syntax)
+borgmatic_schedule_calendar: "*:{{ '%02d' % (60 | random(seed=inventory_hostname)) }}"
+# randomly spread backups across this time frame
+borgmatic_schedule_delay: 0
+# At 07:xx every day
+borgmatic_sync_schedule_calendar: "07:{{ '%02d' % (60 | random(seed=inventory_hostname + 'sync')) }}"
+# randomly spread backup syncing across this time frame
+borgmatic_sync_schedule_delay: 0
+
+# Backup cleanup, executed if backup completed with success
+borgmatic_prune_keep_within: 1d
+borgmatic_prune_keep_daily: 7
+borgmatic_prune_keep_weekly: 4
+borgmatic_prune_keep_monthly: 12
+borgmatic_prune_keep_yearly: 10
+
+borgmatic_binary_location: /usr/local/bin/borgmatic

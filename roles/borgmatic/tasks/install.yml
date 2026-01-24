@@ -1,0 +1,16 @@
+- name: Install borgmatic
+  community.general.pipx:
+    name: borgbackup
+    state: inject
+    install_apps: true
+    global: true
+    inject_packages:
+      - "borgmatic{{ borgmatic_version | default('') }}"
+  # In check mode the venv might not exist yet
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Create borgmatic config directory
+  ansible.builtin.file:
+    path: /etc/borgmatic
+    state: directory
+    mode: "0700"

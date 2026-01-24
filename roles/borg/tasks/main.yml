@@ -1,5 +1,2 @@
-- import_tasks: borg.yml
-  when: borg_backups_enabled
-
-- import_tasks: borg_disable.yml
-  when: borg_backups_enabled == False
+- import_tasks: uninstall_package.yml
+- import_tasks: pip_install.yml

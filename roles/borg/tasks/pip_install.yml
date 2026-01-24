@@ -1,0 +1,28 @@
+- name: Install general dependencies (openssh and pipx)
+  ansible.builtin.apt:
+    pkg:
+      - openssh-client
+      - pipx
+    state: present
+
+- name: Install build dependencies and pipx
+  ansible.builtin.apt:
+    pkg: "{{ borg_pip_packages }}"
+    state: present
+
+- name: Install borg via pipx
+  community.general.pipx:
+    name: "borgbackup{{ borg_version | default('') }}"
+    state: present
+    global: true
+
+- name: Install additional Python packages
+  community.general.pipx:
+    name: borgbackup
+    state: inject
+    install_apps: false
+    global: true
+    inject_packages: "{{ borg_python_packages }}"
+  when: borg_python_packages is defined and borg_python_packages | length > 0
+  # In check mode the venv might not exist yet
+  ignore_errors: "{{ ansible_check_mode }}"

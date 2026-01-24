@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Daily Sync of Borgmatic Repository to Remote Backup
+
+[Timer]
+OnCalendar={{ borgmatic_sync_schedule_calendar }}
+Persistent=true
+RandomizedDelaySec={{ borgmatic_sync_schedule_delay }}
+
+[Install]
+WantedBy=timers.target

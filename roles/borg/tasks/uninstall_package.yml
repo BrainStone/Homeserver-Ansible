@@ -1,0 +1,5 @@
+- name: Uninstall apt borg package if present
+  ansible.builtin.apt:
+    name: borgbackup
+    state: absent
+  when: ansible_os_family == 'Debian'

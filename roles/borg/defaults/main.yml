@@ -1,29 +1,29 @@
-# Sets whether borg backups are enabled or not
-borg_backups_enabled: yes
+# Packages required for building Borg
+borg_pip_packages:
+  - build-essential
+  - libacl1
+  - libacl1-dev
+  - libfuse3-dev
+  - liblz4-dev
+  - libssl-dev
+  - libxxhash-dev
+  - libzstd-dev
+  - python3-dev
+  - python3-msgpack
+  - python3-pip
+  - python3-pkgconfig
+  - python3-setuptools
+  - python3-venv
 
-# List of directories to exclude
-borg_paths_exclude: []
+# Version of Borg to install
+borg_version: '<2.0.0'
 
-borg_repository: /backup/borg
+# Additional Python packages to install in the virtual environment
+borg_python_packages:
+  - pyfuse3
 
-borg_compression: auto,lzma,6
+# Whether to create symlinks in /usr/local/bin
+borg_create_symlinks: yes
 
-# Enable timer unit
-borg_schedule: yes
-# Every hour (systemd timer syntax)
-borg_schedule_calendar: "hourly"
-# randomly spread backups across 10 minutes
-borg_schedule_delay: 600
-
-# Robustness settings
-borg_error_on_warn: false
-borg_always_cleanup: true
-
-# Backup cleanup, executed if backup completed with success
-borg_prune_keep_within: 1d
-borg_prune_keep_daily: 7
-borg_prune_keep_weekly: 4
-borg_prune_keep_monthly: 12
-borg_prune_keep_yearly: 10
-
-borg_binary_location: /usr/bin/borg
+# Path to the Borg binary
+borg_binary_location: /usr/local/bin/borg

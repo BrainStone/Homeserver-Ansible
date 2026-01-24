@@ -1,0 +1,33 @@
+- name: Disable borgmatic.timer
+  systemd:
+    name: borgmatic.timer
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+
+- name: Disable borgmatic-repo-sync.timer
+  systemd:
+    name: borgmatic-repo-sync.timer
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+
+- name: Delete borgmatic systemd files
+  file:
+    state: absent
+    path: "/etc/systemd/system/borgmatic.{{ item }}"
+  with_items:
+    - service
+    - timer
+
+- name: Delete borgmatic repository sync systemd files
+  file:
+    state: absent
+    path: "/etc/systemd/system/borgmatic-repo-sync.{{ item }}"
+  with_items:
+    - service
+    - timer
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes

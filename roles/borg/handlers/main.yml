@@ -1,3 +1,0 @@
-- name: Create server repository
-  shell: '[ -f {{ borg_repository }}/config ] || (. ~/.borg/inc.sh && borg init -e repokey)'
-  ignore_errors: yes

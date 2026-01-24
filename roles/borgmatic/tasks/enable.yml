@@ -1,0 +1,60 @@
+- import_tasks: install.yml
+
+- name: Create Borg data dir
+  file:
+    state: directory
+    path: /root/.borg/exclusions.d
+    mode: 0700
+  tags: borgexclude
+
+- name: Local repository setup
+  block:
+    - name: Create Borg repository
+      file:
+        state: directory
+        path: "{{ borgmatic_repository }}"
+        mode: 0700
+      tags: borgexclude
+
+    - name: Borg self exclusion
+      copy:
+        dest: /root/.borg/exclusions.d/self.conf
+        content: "{{ borgmatic_repository+'\n' }}"
+      tags: borgexclude
+  # Only run for local repositories (not matching protocol identifier like ssh://, http://, etc.)
+  when: not borgmatic_repository is regex('\w+://')
+
+- name: Borg default exclusions
+  copy:
+    dest: /root/.borg/exclusions.d/default.conf
+    content: "{{ borgmatic_default_exclude | join('\n')+'\n' }}"
+  tags: borgexclude
+
+- name: Borg host specific exclusions
+  copy:
+    dest: /root/.borg/exclusions.d/host.conf
+    content: "{{ borgmatic_paths_exclude | join('\n')+'\n' }}"
+  tags: borgexclude
+
+- name: Template borgmatic config file
+  template:
+    src: config.yaml.j2
+    dest: /etc/borgmatic/config.yaml
+
+- name: Template borgmatic systemd files
+  template:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+    - ../templates/systemd/borgmatic/*.j2
+
+- name: Enable borgmatic.timer
+  systemd:
+    name: borgmatic.timer
+    daemon_reload: yes
+    enabled: "{{ borgmatic_schedule | ternary('yes', 'no') }}"
+    state: "{{ borgmatic_schedule | ternary('started', 'stopped') }}"
+  # In check mode the timer may not exist (yet)
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- import_tasks: rsync.yml
