@@ -18,12 +18,12 @@
           'nginx-full',
           'python3-certbot-nginx',
         ] +
-        (['php'] | product(php_versions, [''] + (['-'] | product(
+        (['php'] | product(php_versions, ['-'] | product(
           (
             ['fpm', 'cgi', 'cli', 'mbstring'] +
             php_extra_packages
           ) | unique
-        ) | map('join') | list)) | map('join') | list)
+        ) | map('join') | list) | map('join') | list)
       }}
     state: present
 
@@ -53,14 +53,6 @@
   file:
     path: /etc/ssl/nginx/dhparams.pem
     mode: 0600
-  ignore_errors: "{{ ansible_check_mode }}"
-  notify: Reload nginx
-
-- name: Download Let's Encrypt Root Cert
-  get_url:
-    url: https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem
-    dest: /etc/ssl/nginx/lets-encrypt-x3-cross-signed.pem
-    force: true
   ignore_errors: "{{ ansible_check_mode }}"
   notify: Reload nginx
 
