@@ -1,3 +1,9 @@
+- name: Allow insecure Apt keys
+  ansible.builtin.template:
+    src: apt/apt.conf.d/25keypolicy.j2
+    dest: /etc/apt/apt.conf.d/25keypolicy
+    mode: 0644
+
 - name: Add Ansible Repo for Debian or Ubuntu
   ansible.builtin.deb822_repository:
     name: ansible
@@ -19,6 +25,7 @@
   apt:
     pkg:
       - ansible
+      - ansible-core
       - openssh-server
       - openssh-sftp-server
       - "{{ python_package_version }}-argcomplete"

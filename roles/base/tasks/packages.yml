@@ -55,7 +55,7 @@
 - name: Add Roberto Mier Escandon's repo
   ansible.builtin.deb822_repository:
     name: rmescandon-yq
-    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCC86BB64
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9A2D61F6BB03CED7522B8E7D6657DBE0CC86BB64
     uris:
       - http://ppa.launchpad.net/rmescandon/yq/ubuntu
     suites:
