@@ -17,3 +17,9 @@
     name: hassio
     state: running
     autostart: true
+
+- name: Deploy optimization script
+  template:
+    src: optimize_image.sh.j2
+    dest: "{{ hassio_data }}/optimize_image.sh"
+    mode: '0755'

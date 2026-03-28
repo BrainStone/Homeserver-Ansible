@@ -1,0 +1,86 @@
+#!/bin/bash
+# {{ ansible_managed }}
+set -e
+
+# Configuration
+VM_NAME="hassio"
+IMAGE_PATH="{{ hassio_data }}/haos_ova.qcow2"
+LOG_FILE="{{ hassio_data }}/optimization.log"
+TMP_DIR="/root/.virt-sparsify-tmp"
+
+# Helper for logging to both console and log file
+function log() {
+	local message timestamp
+
+	message="$1"
+	timestamp="$(date "+%Y-%m-%d %H:%M:%S")"
+
+	echo "[$timestamp] $message" | tee -a "$LOG_FILE"
+}
+
+touch "$LOG_FILE"
+
+log "Starting optimization process for $VM_NAME"
+
+## 1. Shut down the VM
+if virsh list --name | grep -qx "$VM_NAME"; then
+	log "Shutting down VM $VM_NAME..."
+	virsh shutdown "$VM_NAME"
+
+	log "Waiting for $VM_NAME to shut down..."
+	while virsh list --name | grep -qx "$VM_NAME"; do
+		sleep 2
+	done
+	log "VM $VM_NAME is shut down."
+else
+	log "VM $VM_NAME is already shut down."
+fi
+
+## 2. Optimize the image
+log "Optimizing image at $IMAGE_PATH"
+
+# Capture original file attributes (chattr doesn't have --reference)
+ORIG_ATTRS=""
+if command -v lsattr >/dev/null 2>&1; then
+	ORIG_ATTRS=$(lsattr "$IMAGE_PATH" | awk '{print $1}' | tr -d -- -.)
+fi
+
+SIZE_BEFORE=$(du -h "$IMAGE_PATH" | cut -f1)
+log "Size before: $SIZE_BEFORE"
+
+# Create a clean temporary directory on /
+rm -rf "$TMP_DIR"
+mkdir -p "$TMP_DIR"
+touch "$TMP_DIR/.nobackup"
+
+log "Running virt-sparsify..."
+if virt-sparsify --color --check-tmpdir=fail --tmp "$TMP_DIR" "$IMAGE_PATH" "$IMAGE_PATH.tmp" 2>&1 | tee -a "$LOG_FILE"; then
+	# Ensure owner, permissions and attributes are identical, then override
+	chown --reference="$IMAGE_PATH" "$IMAGE_PATH.tmp"
+	chmod --reference="$IMAGE_PATH" "$IMAGE_PATH.tmp"
+
+	if [ -n "$ORIG_ATTRS" ] && command -v chattr >/dev/null 2>&1; then
+		chattr "+$ORIG_ATTRS" "$IMAGE_PATH.tmp" 2>/dev/null || true
+	fi
+
+	mv -f "$IMAGE_PATH.tmp" "$IMAGE_PATH"
+	log "Optimization successful."
+else
+	log "ERROR: virt-sparsify failed!"
+	# Cleanup tmp image if it exists
+	rm -f "$IMAGE_PATH.tmp"
+	exit 1
+fi
+
+# Cleanup TMP_DIR (optional, but good practice to keep it clean)
+rm -rf "$TMP_DIR"
+
+SIZE_AFTER=$(du -h "$IMAGE_PATH" | cut -f1)
+log "Size after: $SIZE_AFTER"
+
+## 3. Start the VM
+log "Starting VM $VM_NAME"
+virsh start "$VM_NAME"
+
+log "Finished optimization process for $VM_NAME"
+log "--------------------------------------------------"
