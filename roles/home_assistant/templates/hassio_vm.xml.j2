@@ -77,6 +77,15 @@
 		<input type="mouse" bus="ps2"/>
 		<input type="keyboard" bus="ps2"/>
 		<audio id="1" type="none"/>
+{% for usb_device in hassio_usb_devices %}
+		<hostdev mode="subsystem" type="usb" managed="yes">
+			<source>
+				<vendor id="0x{{ usb_device.split(':')[0] }}"/>
+				<product id="0x{{ usb_device.split(':')[1] }}"/>
+			</source>
+			<address type="usb" bus="0" port="{{ loop.index }}"/>
+		</hostdev>
+{% endfor %}
 		<memballoon model="virtio">
 			<address type="pci" domain="0x0000" bus="0x00" slot="0x05" function="0x0"/>
 		</memballoon>

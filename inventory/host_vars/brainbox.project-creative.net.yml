@@ -90,6 +90,11 @@ wireguard_easy_wg_allowed_ips:
 
 hassio_data: /data/home-assistant
 hassio_ip: '10.69.42.40'
+hassio_usb_devices:
+  # Generic Bluetooth USB
+  - "0a12:0001"
+  # Home Assistant Connect ZBT-2
+  - "303a:831a"
 
 influxdb_url: http://hassio.brainbox.project-creative.net:8086
 influxdb_database: homeAssistant
