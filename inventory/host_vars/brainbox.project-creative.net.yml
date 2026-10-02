@@ -45,7 +45,7 @@ php_extra_packages:
   - zip
 
 # Setting these defaults manually because they are used in other variables
-heimdall_php_version: '8.2'
+heimdall_php_version: '8.4'
 heimdall_base_dir: /var/www/heimdall
 
 php_versions:
