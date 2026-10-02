@@ -1,7 +1,7 @@
 ---
 - name: Install go
   apt:
-    default_release: "{{ ansible_distribution_release | lower }}-backports"
+    default_release: "{{ ansible_facts['distribution_release'] | lower }}-backports"
     name: golang-go
     state: present
 

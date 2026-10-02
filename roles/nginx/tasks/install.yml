@@ -5,7 +5,7 @@
     uris:
       - https://packages.sury.org/php/
     suites:
-      - "{{ ansible_distribution_release }}"
+      - "{{ ansible_facts['distribution_release'] }}"
     components:
       - main
   check_mode: false

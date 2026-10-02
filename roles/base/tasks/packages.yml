@@ -14,9 +14,9 @@
     uris:
       - mirror+file:///etc/apt/mirrors/debian.list
     suites:
-      - "{{ ansible_distribution_release }}"
-      - "{{ ansible_distribution_release }}-updates"
-      - "{{ ansible_distribution_release }}-backports"
+      - "{{ ansible_facts['distribution_release'] }}"
+      - "{{ ansible_facts['distribution_release'] }}-updates"
+      - "{{ ansible_facts['distribution_release'] }}-backports"
     components:
       - main
       - contrib
@@ -33,7 +33,7 @@
     uris:
       - mirror+file:///etc/apt/mirrors/debian-security.list
     suites:
-      - "{{ ansible_distribution_release }}-security"
+      - "{{ ansible_facts['distribution_release'] }}-security"
     components:
       - main
       - contrib
@@ -47,7 +47,7 @@
     uris:
       - https://packages.azlux.fr/debian/
     suites:
-      - "{{ ansible_distribution_release | lower }}"
+      - "{{ ansible_facts['distribution_release'] | lower }}"
     components:
       - main
   check_mode: false

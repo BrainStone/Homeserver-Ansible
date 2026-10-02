@@ -14,11 +14,11 @@
     ifname: br0
     autoconnect: true
     stp: false
-    ip4: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('address/prefix') }}"
-    gw4: "{{ ansible_default_ipv4.gateway }}"
+    ip4: "{{ (ansible_facts['default_ipv4']['address'] + '/' + ansible_facts['default_ipv4']['netmask']) | ansible.utils.ipaddr('address/prefix') }}"
+    gw4: "{{ ansible_facts['default_ipv4']['gateway'] }}"
     dns4:
-      - "{{ ansible_default_ipv4.address }}"
-      - "{{ ansible_default_ipv4.gateway }}"
+      - "{{ ansible_facts['default_ipv4']['address'] }}"
+      - "{{ ansible_facts['default_ipv4']['gateway'] }}"
     method6: auto
     ip_privacy6: prefer-public-addr
 

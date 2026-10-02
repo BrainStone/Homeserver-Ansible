@@ -9,9 +9,9 @@
       - deb
       - deb-src
     uris:
-      - "https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_distribution | lower }}/"
+      - "https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_facts['distribution'] | lower }}/"
     suites:
-      - "{{ ansible_distribution_release }}"
+      - "{{ ansible_facts['distribution_release'] }}"
     components:
       - main
   check_mode: false

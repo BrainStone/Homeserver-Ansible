@@ -3,9 +3,9 @@
     name: docker
     signed_by: https://download.docker.com/linux/ubuntu/gpg
     uris:
-      - "https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }}"
+      - "https://download.docker.com/{{ ansible_facts['system'] | lower }}/{{ ansible_facts['distribution'] | lower }}"
     suites:
-      - "{{ ansible_distribution_release }}"
+      - "{{ ansible_facts['distribution_release'] }}"
     components:
       - stable
   check_mode: false

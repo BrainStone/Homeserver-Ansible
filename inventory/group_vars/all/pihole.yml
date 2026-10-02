@@ -6,7 +6,7 @@ pihole_webpassword: !vault |
   3533643139393334650a613235393062333133303064623631346163376536636662383765343239
   34383165336164626135343561346434323564353033356139373839613038363265
 
-ip_with_netmask: "{{ ansible_default_ipv4.address }}/{{ ansible_default_ipv4.netmask }}"
+ip_with_netmask: "{{ ansible_facts['default_ipv4']['address'] }}/{{ ansible_facts['default_ipv4']['netmask'] }}"
 
 pihole_use_cli: true
 pihole_install_web_server: false

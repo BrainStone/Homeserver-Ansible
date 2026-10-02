@@ -11,7 +11,7 @@
     uris:
       - http://ppa.launchpad.net/ansible/ansible/ubuntu
     suites:
-      - "{{ 'noble' if (ansible_distribution == 'Debian') else ansible_lsb.codename }}"
+      - "{{ 'noble' if (ansible_facts['distribution'] == 'Debian') else ansible_facts['lsb']['codename'] }}"
     components:
       - main
   check_mode: false
