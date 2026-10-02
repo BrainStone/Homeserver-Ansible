@@ -20,6 +20,7 @@
     
     # Software stuff
     - { name: vulkan, tags: [ vulkan, gpu, ai ] }
+    - { name: ollama, tags: [ ollama, ai ] }
     - { name: heimdall, tags: [ heimdall, nginx ] }
     - { name: gitlab_runner, tags: gitlab_runner, when: gitlab_runner_token is defined }
 #    - { name: r_pufky.pihole, tags: [ pihole, nginx ] }

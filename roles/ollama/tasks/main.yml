@@ -1,0 +1,50 @@
+- name: Download Ollama installer
+  ansible.builtin.get_url:
+    url: "{{ ollama_install_url }}"
+    dest: "{{ ollama_install_script }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Install Ollama
+  ansible.builtin.command:
+    cmd: "{{ ollama_install_script }}"
+    creates: /usr/local/bin/ollama
+
+- name: Mark Ollama data as excluded from Borg backups
+  ansible.builtin.file:
+    path: /usr/share/ollama/.nobackup
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+    modification_time: preserve
+    access_time: preserve
+  tags: borgexclude
+
+- name: Create Ollama systemd drop-in directory
+  ansible.builtin.file:
+    path: "{{ ollama_service_drop_in | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configure Ollama Vulkan backend and disable cloud services
+  ansible.builtin.copy:
+    dest: "{{ ollama_service_drop_in }}"
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [Service]
+      Environment=OLLAMA_VULKAN=1
+      Environment=OLLAMA_LLM_LIBRARY=vulkan
+      Environment=OLLAMA_NO_CLOUD=1
+  notify: Restart Ollama
+
+- name: Enable and start Ollama
+  ansible.builtin.systemd:
+    name: "{{ ollama_service }}"
+    enabled: true
+    state: started
