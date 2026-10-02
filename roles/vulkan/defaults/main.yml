@@ -1,0 +1,13 @@
+vulkan_packages:
+  - firmware-misc-nonfree
+  - libdrm-nouveau2
+  - libvulkan1
+  - mesa-utils
+  - mesa-vulkan-drivers
+  - nvtop
+  - vulkan-tools
+
+vulkan_apt_default_release: "{{ ansible_distribution_release }}-backports"
+
+nouveau_module: nouveau
+nouveau_modprobe_config: /etc/modprobe.d/nvidia.conf
