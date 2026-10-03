@@ -1,0 +1,13 @@
+- name: Install NVIDIA driver build dependencies
+  ansible.builtin.apt:
+    name: "{{ nvidia_driver_build_packages }}"
+    state: present
+    update_cache: true
+
+- name: Remove conflicting packaged NVIDIA driver
+  ansible.builtin.apt:
+    name: "{{ nvidia_driver_conflicting_packages }}"
+    state: absent
+    purge: true
+  register: nvidia_conflicting_packages_removed
+  notify: Rebuild NVIDIA initramfs

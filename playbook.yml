@@ -19,6 +19,7 @@
     - { name: docker, tags: docker }
     
     # Software stuff
+    - { name: nvidia, tags: [ nvidia, gpu, ai ] }
     - { name: vulkan, tags: [ vulkan, gpu, ai ] }
     - { name: ollama, tags: [ ollama, ai ] }
     - { name: heimdall, tags: [ heimdall, nginx ] }

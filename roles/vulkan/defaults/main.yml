@@ -8,6 +8,3 @@ vulkan_packages:
   - vulkan-tools
 
 vulkan_apt_default_release: "{{ ansible_facts['distribution_release'] }}-backports"
-
-nouveau_module: nouveau
-nouveau_modprobe_config: /etc/modprobe.d/nvidia.conf

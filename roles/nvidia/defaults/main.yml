@@ -1,0 +1,33 @@
+nvidia_driver_version: '470.256.02'
+nvidia_driver_installer_url: "https://download.nvidia.com/XFree86/Linux-x86_64/{{ nvidia_driver_version }}/NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}.run"
+nvidia_driver_installer_sha256: d6451862deb695bb0447f3b7cd6268f73e81168c10e2c10597ff3fa01349b1de
+nvidia_driver_work_dir: /var/cache/nvidia-470
+nvidia_driver_installer: "{{ nvidia_driver_work_dir }}/NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}.run"
+nvidia_driver_source_dir: "{{ nvidia_driver_work_dir }}/NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}"
+nvidia_driver_blacklist_file: /etc/modprobe.d/blacklist-nouveau-nvidia.conf
+nvidia_driver_grub_file: /etc/default/grub.d/99-nvidia.cfg
+
+nvidia_driver_patch_urls:
+  - https://raw.githubusercontent.com/haxllo/nvidia-470xx-linux-7.0/main/0001-Fix-conftest-to-ignore-implicit-function-declaration.patch
+  - https://raw.githubusercontent.com/haxllo/nvidia-470xx-linux-7.0/main/0002-Fix-conftest-to-use-a-short-wchar_t.patch
+  - https://raw.githubusercontent.com/haxllo/nvidia-470xx-linux-7.0/main/0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch
+  - https://raw.githubusercontent.com/haxllo/nvidia-470xx-linux-7.0/main/kernel-6.10.patch
+  - https://raw.githubusercontent.com/haxllo/nvidia-470xx-linux-7.0/main/kernel-6.12.patch
+
+nvidia_driver_build_packages:
+  - build-essential
+  - dkms
+  - pkg-config
+  - libglvnd-dev
+  - "linux-headers-{{ ansible_facts['kernel'] }}"
+
+nvidia_driver_conflicting_packages:
+  - cuda-drivers
+  - nvidia-driver
+  - nvidia-kernel-dkms
+  - nvidia-open-kernel-dkms
+  - nvidia-driver-bin
+  - nvidia-driver-libs
+  - nvidia-utils
+  - nvidia-vulkan-icd
+  - xserver-xorg-video-nvidia

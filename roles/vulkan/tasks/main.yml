@@ -4,16 +4,3 @@
     state: present
     default_release: "{{ vulkan_apt_default_release }}"
     update_cache: true
-
-- name: Remove proprietary-driver blacklist for Nouveau
-  ansible.builtin.lineinfile:
-    path: "{{ nouveau_modprobe_config }}"
-    regexp: '^\s*blacklist\s+nouveau\s*$'
-    state: absent
-  notify: Rebuild initramfs
-
-- name: Load Nouveau now and persist it at boot
-  community.general.modprobe:
-    name: "{{ nouveau_module }}"
-    state: present
-    persistent: present

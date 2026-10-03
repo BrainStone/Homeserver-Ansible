@@ -1,0 +1,24 @@
+- name: Blacklist Nouveau
+  ansible.builtin.copy:
+    dest: "{{ nvidia_driver_blacklist_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      # Managed by Ansible.
+      blacklist nouveau
+      options nouveau modeset=0
+  register: nvidia_nouveau_blacklist
+  notify: Rebuild NVIDIA initramfs
+
+- name: Enable NVIDIA DRM kernel mode setting
+  ansible.builtin.copy:
+    dest: "{{ nvidia_driver_grub_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      # Managed by Ansible.
+      GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT nvidia-drm.modeset=1"
+  register: nvidia_grub_configuration
+  notify: Update GRUB

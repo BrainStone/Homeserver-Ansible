@@ -1,0 +1,43 @@
+- name: Create NVIDIA driver work directory
+  ansible.builtin.file:
+    path: "{{ nvidia_driver_work_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Download NVIDIA 470 installer
+  ansible.builtin.get_url:
+    url: "{{ nvidia_driver_installer_url }}"
+    dest: "{{ nvidia_driver_installer }}"
+    checksum: "sha256:{{ nvidia_driver_installer_sha256 }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Download NVIDIA kernel compatibility patches
+  ansible.builtin.get_url:
+    url: "{{ item }}"
+    dest: "{{ nvidia_driver_work_dir }}/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ nvidia_driver_patch_urls }}"
+
+- name: Extract NVIDIA installer
+  ansible.builtin.command:
+    cmd: "{{ nvidia_driver_installer }} --extract-only"
+    chdir: "{{ nvidia_driver_work_dir }}"
+    creates: "{{ nvidia_driver_source_dir }}/nvidia-installer"
+
+- name: Apply NVIDIA 470 kernel compatibility patches
+  ansible.builtin.shell:
+    cmd: |
+      set -e
+      patch --batch --forward -d "{{ nvidia_driver_source_dir }}/kernel" -p1 < "{{ nvidia_driver_work_dir }}/0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
+      patch --batch --forward -d "{{ nvidia_driver_source_dir }}/kernel" -p1 < "{{ nvidia_driver_work_dir }}/0002-Fix-conftest-to-use-a-short-wchar_t.patch"
+      patch --batch --forward -d "{{ nvidia_driver_source_dir }}/kernel" -p1 < "{{ nvidia_driver_work_dir }}/0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
+      patch --batch --forward -d "{{ nvidia_driver_source_dir }}/kernel" -p1 < "{{ nvidia_driver_work_dir }}/kernel-6.10.patch"
+      patch --batch --forward -d "{{ nvidia_driver_source_dir }}/kernel" -p1 < "{{ nvidia_driver_work_dir }}/kernel-6.12.patch"
+      touch "{{ nvidia_driver_source_dir }}/.patched"
+    creates: "{{ nvidia_driver_source_dir }}/.patched"

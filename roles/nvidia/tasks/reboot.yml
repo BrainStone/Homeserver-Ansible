@@ -1,0 +1,8 @@
+- name: Reboot after NVIDIA driver installation
+  ansible.builtin.reboot:
+    msg: Rebooting to activate the NVIDIA 470 driver
+    reboot_timeout: 600
+    connect_timeout: 20
+    test_command: nvidia-smi
+  when:
+    - nvidia_conflicting_packages_removed is changed or nvidia_nouveau_blacklist is changed or nvidia_grub_configuration is changed or nvidia_driver_install is changed

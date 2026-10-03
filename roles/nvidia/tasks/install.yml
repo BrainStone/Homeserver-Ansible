@@ -1,0 +1,12 @@
+- name: Install patched NVIDIA driver
+  ansible.builtin.command:
+    cmd: >-
+      {{ nvidia_driver_source_dir }}/nvidia-installer
+      --silent --accept-license --no-questions --no-distro-scripts
+      --no-cc-version-check --no-precompiled-interface --dkms
+    creates: "/usr/src/nvidia-{{ nvidia_driver_version }}"
+  register: nvidia_driver_install
+  notify: Rebuild NVIDIA initramfs
+
+- name: Apply pending NVIDIA boot configuration
+  ansible.builtin.meta: flush_handlers
