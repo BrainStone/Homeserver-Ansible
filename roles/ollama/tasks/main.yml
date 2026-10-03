@@ -24,23 +24,21 @@
 
 - name: Create Ollama systemd drop-in directory
   ansible.builtin.file:
-    path: "{{ ollama_service_drop_in | dirname }}"
+    path: "/etc/systemd/system/{{ ollama_service }}.service.d"
     state: directory
     owner: root
     group: root
     mode: '0755'
 
-- name: Configure Ollama Vulkan backend and disable cloud services
-  ansible.builtin.copy:
-    dest: "{{ ollama_service_drop_in }}"
+- name: Configure Ollama systemd drop-ins
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ ollama_service }}.service.d/{{ item | basename | regex_replace('\\.j2$', '') }}"
     owner: root
     group: root
     mode: '0644'
-    content: |
-      [Service]
-      Environment=OLLAMA_VULKAN=1
-      Environment=OLLAMA_LLM_LIBRARY=vulkan
-      Environment=OLLAMA_NO_CLOUD=1
+  with_fileglob:
+    - ../templates/systemd/*.conf.j2
   notify: Restart Ollama
 
 - name: Enable and start Ollama

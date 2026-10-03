@@ -1,4 +1,3 @@
 ollama_install_url: https://ollama.com/install.sh
 ollama_install_script: /usr/local/src/ollama-install.sh
 ollama_service: ollama
-ollama_service_drop_in: /etc/systemd/system/ollama.service.d/vulkan.conf

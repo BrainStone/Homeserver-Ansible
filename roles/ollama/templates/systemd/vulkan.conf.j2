@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+# Configure Ollama to use the Vulkan backend for GPU inference.
+[Service]
+Environment=OLLAMA_VULKAN=1
+Environment=OLLAMA_LLM_LIBRARY=vulkan
