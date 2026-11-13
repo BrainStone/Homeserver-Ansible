@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Switch to script dir
-cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+cd "$(dirname -- "${BASH_SOURCE[0]}")" || exit 1
 
 ansibleSshKeyArguments=()
 
